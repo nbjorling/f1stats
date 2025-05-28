@@ -3,12 +3,8 @@ import {
   IconCapsuleHorizontal,
   IconCloudRain,
   IconDropletPin,
-  IconMeteor,
-  IconPercentage50,
   IconRoad,
-  IconSunWind,
   IconTemperature,
-  IconWaterpolo,
   IconWind,
 } from '@tabler/icons-react';
 
@@ -34,7 +30,6 @@ export default function WeatherCard({
     wind_speed,
     wind_direction,
     rainfall,
-    date,
   } = weather;
 
   return (

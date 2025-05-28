@@ -1,39 +1,15 @@
 'use client';
 
 import * as React from 'react';
-import {
-  IconCamera,
-  IconChartBar,
-  IconDashboard,
-  IconDatabase,
-  IconFileAi,
-  IconFileDescription,
-  IconFileWord,
-  IconFolder,
-  IconHelmet,
-  IconHelp,
-  IconHome2,
-  IconInnerShadowTop,
-  IconListDetails,
-  IconReport,
-  IconSearch,
-  IconSettings,
-  IconUsers,
-  IconWheel,
-} from '@tabler/icons-react';
+import { IconHelmet, IconHome2, IconWheel } from '@tabler/icons-react';
 
-import { NavDocuments } from '@/components/nav-documents';
 import { NavMain } from '@/components/nav-main';
-import { NavSecondary } from '@/components/nav-secondary';
 import { NavUser } from '@/components/nav-user';
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
 } from '@/components/ui/sidebar';
 
 const data = {
@@ -52,11 +28,6 @@ const data = {
       title: 'Drivers',
       url: '/drivers',
       icon: IconHelmet,
-    },
-    {
-      title: 'Pitstops',
-      url: '/pitstop',
-      icon: IconWheel,
     },
     {
       title: 'Pitstops',

@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import Image from 'next/image';
 
 const data = [
   {
@@ -336,11 +337,15 @@ export default function DriverCards() {
               </span>
               {driver.last_name}
             </p>
-            <img
-              src={driver.headshot_url}
-              alt={driver.full_name}
-              className="w-16 h-16 rounded-full"
-            />
+            {driver.headshot_url && (
+              <Image
+                src={driver.headshot_url}
+                alt={driver.full_name}
+                className="w-16 h-16 rounded-full"
+                width={64}
+                height={64}
+              />
+            )}
           </CardContent>
           {/* <CardFooter className="flex-col items-start gap-1.5 text-sm">
             <div className="line-clamp-1 flex gap-2 font-medium items-center">

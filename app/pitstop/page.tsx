@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 // import { Skeleton } from '@/components/ui/skeleton';
 // import { ScrollArea } from '@/components/ui/scroll-area';
 import WeatherCard from '@/components/weathercard';
+import Image from 'next/image';
 
 const weather = {
   air_temperature: 25,
@@ -318,6 +319,27 @@ const driverData = [
   },
 ];
 
+type Pitstop = {
+  date: string;
+  driver_number: number;
+  lap_number: number;
+  meeting_key: number;
+  pit_duration: number;
+  session_key: number;
+};
+
+type Driver = {
+  driver_number: number;
+  first_name: string;
+  last_name: string;
+  team_colour: string;
+  headshot_url?: string | null;
+  team_name?: string;
+  country_code?: string | null;
+};
+
+type PitStopFullData = Driver & { stops: Pitstop[] };
+
 const getTextColor = (
   stopTime: number,
   quickestPitStop: number,
@@ -338,10 +360,10 @@ const getTextColor = (
 };
 
 export default function PitStops() {
-  const [pitStops, setPitStops] = useState([]);
+  const [pitStops, setPitStops] = useState<PitStopFullData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [quickestPitStop, setQuickestPitStop] = useState(null);
-  const [slowestPitStop, setSlowestPitStop] = useState(null);
+  const [quickestPitStop, setQuickestPitStop] = useState<Pitstop | null>(null);
+  const [slowestPitStop, setSlowestPitStop] = useState<Pitstop | null>(null);
 
   useEffect(() => {
     async function fetchPitStops() {
@@ -354,20 +376,22 @@ export default function PitStops() {
         if (sessions.length === 0) return;
 
         const { session_key } = sessions.at(-1);
-        console.log('Koca: session_key ', session_key);
 
         const pitStopsRes = await fetch(
           `https://api.openf1.org/v1/pit?session_key=${session_key}`
         );
-        const weatherRes = await fetch(
-          `https://api.openf1.org/v1/weather?session_key=${session_key}`
-        );
-        const pitStopsData = await pitStopsRes.json();
-        const weatherData = await weatherRes.json();
-        console.log('Koca: weatherData ', weatherData);
-        const driverMap = {};
+        // const weatherRes = await fetch(
+        //   `https://api.openf1.org/v1/weather?session_key=${session_key}`
+        // );
+
+        const pitStopsData: Pitstop[] = await pitStopsRes.json();
+
+        // const weatherData = await weatherRes.json();
+
+        const driverMap: Record<number, Pitstop[]> = {};
+
         pitStopsData.forEach((stop) => {
-          if (!driverMap[stop.driver_number]) {
+          if (stop.driver_number && !driverMap[stop.driver_number]) {
             driverMap[stop.driver_number] = [];
           }
           driverMap[stop.driver_number].push(stop);
@@ -391,10 +415,18 @@ export default function PitStops() {
               (driverMap) => driverMap.driver_number === parseInt(driver_number)
             );
 
+            if (!thisDriver) {
+              throw new Error(`Driver with number ${driver_number} not found`);
+            }
+
             return {
-              ...thisDriver,
-              driver_number,
-              totalStops: stops.length,
+              driver_number: parseInt(driver_number),
+              first_name: thisDriver.first_name,
+              last_name: thisDriver.last_name,
+              team_colour: thisDriver.team_colour,
+              headshot_url: thisDriver.headshot_url,
+              team_name: thisDriver.team_name,
+              country_code: thisDriver.country_code,
               stops,
             };
           }
@@ -415,7 +447,7 @@ export default function PitStops() {
 
     fetchPitStops();
 
-    return () => clearInterval(pollInterval);
+    // return () => clearInterval(pollInterval);
   }, []);
 
   return (
@@ -430,16 +462,20 @@ export default function PitStops() {
           ))} */}
         </div>
       ) : (
-        <div className="grid-cols-3 grid gap-4">
+        <div className="grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 grid gap-4">
           {pitStops.map((driver) => (
             <Card key={driver.driver_number}>
               <CardContent>
                 <div className="flex gap-2">
-                  <img
-                    src={driver.headshot_url}
-                    alt={`${driver.first_name} ${driver.last_name}`}
-                    className="w-12 h-12 rounded-full mr-4"
-                  />
+                  {driver.headshot_url && (
+                    <Image
+                      src={driver.headshot_url}
+                      alt={`${driver.first_name} ${driver.last_name}`}
+                      className="w-12 h-12 rounded-full mr-4"
+                      height={48}
+                      width={48}
+                    />
+                  )}
                   <div className="mr-4 grow">
                     <span
                       className="text-xl font-semibold mr-2"
