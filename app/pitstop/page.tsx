@@ -403,6 +403,18 @@ export default function PitStops() {
           })
         );
 
+        // median pit stop time
+        pitStopsData.sort((a, b) => a.pit_duration - b.pit_duration);
+        const midIndex = Math.floor(pitStopsData.length / 2);
+        const medianPitStop =
+          pitStopsData.length % 2 === 0
+            ? (pitStopsData[midIndex - 1].pit_duration +
+                pitStopsData[midIndex].pit_duration) /
+              2
+            : pitStopsData[midIndex].pit_duration;
+        console.log('Median Pit Stop Time:', medianPitStop);
+        // setMedianPitStop(medianPitStop);
+
         setSlowestPitStop(
           pitStopsData.reduce((prev, current) => {
             return prev.pit_duration > current.pit_duration ? prev : current;
@@ -465,7 +477,7 @@ export default function PitStops() {
         <div className="grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 grid gap-4">
           {pitStops.map((driver) => (
             <Card key={driver.driver_number}>
-              <CardContent>
+              <CardContent className="p-2">
                 <div className="flex gap-2">
                   {driver.headshot_url && (
                     <Image
