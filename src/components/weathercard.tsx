@@ -37,63 +37,36 @@ export default function WeatherCard({
   return (
     <Card>
       <CardContent>
-        <table className="table-auto text-xs w-full">
-          <tbody>
-            <tr>
-              <td className="py-2">
-                <IconClock className="inline mr-2" />
-                <strong>Time</strong>
-              </td>
-              <td className="text-lg">
-                {new Date(date).toLocaleTimeString('sv-SE')}
-              </td>
-            </tr>
-            <tr>
-              <td className="py-2">
-                <IconTemperature className="inline text-yellow-500 mr-2" />
-                <strong>Air Temp</strong>
-              </td>
-              <td className="text-lg">{air_temperature}°C</td>
-            </tr>
-            <tr>
-              <td className="py-2">
-                <IconRoad className="inline text-red-500 mr-2" />
-                <strong>Track Temp</strong>
-              </td>
-              <td className="text-lg">{track_temperature}°C</td>
-            </tr>
-            <tr>
-              <td className="py-2">
-                <IconCloudRain className="inline text-blue-500 mr-2" />
-                <strong>Rainfall</strong>
-              </td>
-              <td className="text-lg">{rainfall} mm</td>
-            </tr>
-            <tr>
-              <td className="py-2">
-                <IconWind className="inline text-green-500 mr-2" />
-                <strong>Wind</strong>
-              </td>
-              <td className="text-lg">
-                {wind_speed} m/s @ {wind_direction}°
-              </td>
-            </tr>
-            <tr>
-              <td className="py-2">
-                <IconDropletPin className="inline text-blue-500 mr-2" />
-                <strong>Humidity</strong>
-              </td>
-              <td className="text-lg">{humidity}%</td>
-            </tr>
-            <tr>
-              <td className="py-2">
-                <IconCapsuleHorizontal className="inline text-gray-500 mr-2" />
-                <strong>Pressure</strong>
-              </td>
-              <td className="text-lg">{pressure} hPa</td>
-            </tr>
-          </tbody>
-        </table>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs xl:grid-cols-6">
+          <div>
+            <IconClock className="inline mr-1" />
+            <strong>Time:</strong> {new Date(date).toLocaleTimeString('sv-SE')}
+          </div>
+          <div>
+            <IconTemperature className="inline text-yellow-500 mr-1" />
+            <strong>Air Temp:</strong> {air_temperature}°C
+          </div>
+          <div>
+            <IconRoad className="inline text-red-500 mr-1" />
+            <strong>Track Temp:</strong> {track_temperature}°C
+          </div>
+          <div>
+            <IconCloudRain className="inline text-blue-500 mr-1" />
+            <strong>Rainfall:</strong> {rainfall} mm
+          </div>
+          <div>
+            <IconWind className="inline text-green-500 mr-1" />
+            <strong>Wind:</strong> {wind_speed} m/s @ {wind_direction}°
+          </div>
+          <div>
+            <IconDropletPin className="inline text-blue-500 mr-1" />
+            <strong>Humidity:</strong> {humidity}%
+          </div>
+          <div>
+            <IconCapsuleHorizontal className="inline text-gray-500 mr-1" />
+            <strong>Pressure:</strong> {pressure} hPa
+          </div>
+        </div>
       </CardContent>
     </Card>
   );
