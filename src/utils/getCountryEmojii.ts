@@ -135,6 +135,6 @@ const getEmoji = (countryCode: string) => {
 };
 
 export const getCountryEmoji = (countryCode: string): string => {
-  const code = countryCode.toUpperCase();
+  const code = countryCode?.toUpperCase();
   return getEmoji(code);
 };

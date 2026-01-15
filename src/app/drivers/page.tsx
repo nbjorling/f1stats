@@ -1,3 +1,4 @@
+'use client';
 import { Badge } from '../../components/ui/badge';
 import {
   Card,
@@ -9,353 +10,99 @@ import {
 import Image from 'next/image';
 import { getCountryEmoji } from '../../utils/getCountryEmojii';
 import { getCountryFullName } from '../../utils/getCountryFullName';
-
-const data = [
-  {
-    meeting_key: 1219,
-    session_key: 9158,
-    driver_number: 1,
-    broadcast_name: 'M VERSTAPPEN',
-    full_name: 'Max VERSTAPPEN',
-    name_acronym: 'VER',
-    team_name: 'Red Bull Racing',
-    team_colour: '3671C6',
-    first_name: 'Max',
-    last_name: 'Verstappen',
-    headshot_url:
-      'https://www.formula1.com/content/dam/fom-website/drivers/M/MAXVER01_Max_Verstappen/maxver01.png.transform/1col/image.png',
-    country_code: 'NED',
-  },
-  {
-    meeting_key: 1219,
-    session_key: 9158,
-    driver_number: 2,
-    broadcast_name: 'L SARGEANT',
-    full_name: 'Logan SARGEANT',
-    name_acronym: 'SAR',
-    team_name: 'Williams',
-    team_colour: '37BEDD',
-    first_name: 'Logan',
-    last_name: 'Sargeant',
-    headshot_url:
-      'https://www.formula1.com/content/dam/fom-website/drivers/L/LOGSAR01_Logan_Sargeant/logsar01.png.transform/1col/image.png',
-    country_code: 'USA',
-  },
-  {
-    meeting_key: 1219,
-    session_key: 9158,
-    driver_number: 4,
-    broadcast_name: 'L NORRIS',
-    full_name: 'Lando NORRIS',
-    name_acronym: 'NOR',
-    team_name: 'McLaren',
-    team_colour: 'F58020',
-    first_name: 'Lando',
-    last_name: 'Norris',
-    headshot_url:
-      'https://www.formula1.com/content/dam/fom-website/drivers/L/LANNOR01_Lando_Norris/lannor01.png.transform/1col/image.png',
-    country_code: 'GBR',
-  },
-  {
-    meeting_key: 1219,
-    session_key: 9158,
-    driver_number: 10,
-    broadcast_name: 'P GASLY',
-    full_name: 'Pierre GASLY',
-    name_acronym: 'GAS',
-    team_name: 'Alpine',
-    team_colour: '2293D1',
-    first_name: 'Pierre',
-    last_name: 'Gasly',
-    headshot_url:
-      'https://www.formula1.com/content/dam/fom-website/drivers/P/PIEGAS01_Pierre_Gasly/piegas01.png.transform/1col/image.png',
-    country_code: 'FRA',
-  },
-  {
-    meeting_key: 1219,
-    session_key: 9158,
-    driver_number: 11,
-    broadcast_name: 'S PEREZ',
-    full_name: 'Sergio PEREZ',
-    name_acronym: 'PER',
-    team_name: 'Red Bull Racing',
-    team_colour: '3671C6',
-    first_name: 'Sergio',
-    last_name: 'Perez',
-    headshot_url:
-      'https://www.formula1.com/content/dam/fom-website/drivers/S/SERPER01_Sergio_Perez/serper01.png.transform/1col/image.png',
-    country_code: 'MEX',
-  },
-  {
-    meeting_key: 1219,
-    session_key: 9158,
-    driver_number: 14,
-    broadcast_name: 'F ALONSO',
-    full_name: 'Fernando ALONSO',
-    name_acronym: 'ALO',
-    team_name: 'Aston Martin',
-    team_colour: '358C75',
-    first_name: 'Fernando',
-    last_name: 'Alonso',
-    headshot_url:
-      'https://www.formula1.com/content/dam/fom-website/drivers/F/FERALO01_Fernando_Alonso/feralo01.png.transform/1col/image.png',
-    country_code: 'ESP',
-  },
-  {
-    meeting_key: 1219,
-    session_key: 9158,
-    driver_number: 16,
-    broadcast_name: 'C LECLERC',
-    full_name: 'Charles LECLERC',
-    name_acronym: 'LEC',
-    team_name: 'Ferrari',
-    team_colour: 'F91536',
-    first_name: 'Charles',
-    last_name: 'Leclerc',
-    headshot_url:
-      'https://www.formula1.com/content/dam/fom-website/drivers/C/CHALEC01_Charles_Leclerc/chalec01.png.transform/1col/image.png',
-    country_code: 'MON',
-  },
-  {
-    meeting_key: 1219,
-    session_key: 9158,
-    driver_number: 18,
-    broadcast_name: 'L STROLL',
-    full_name: 'Lance STROLL',
-    name_acronym: 'STR',
-    team_name: 'Aston Martin',
-    team_colour: '358C75',
-    first_name: 'Lance',
-    last_name: 'Stroll',
-    headshot_url:
-      'https://www.formula1.com/content/dam/fom-website/drivers/L/LANSTR01_Lance_Stroll/lanstr01.png.transform/1col/image.png',
-    country_code: 'CAN',
-  },
-  {
-    meeting_key: 1219,
-    session_key: 9158,
-    driver_number: 20,
-    broadcast_name: 'K MAGNUSSEN',
-    full_name: 'Kevin MAGNUSSEN',
-    name_acronym: 'MAG',
-    team_name: 'Haas F1 Team',
-    team_colour: 'B6BABD',
-    first_name: 'Kevin',
-    last_name: 'Magnussen',
-    headshot_url:
-      'https://www.formula1.com/content/dam/fom-website/drivers/K/KEVMAG01_Kevin_Magnussen/kevmag01.png.transform/1col/image.png',
-    country_code: 'DEN',
-  },
-  {
-    meeting_key: 1219,
-    session_key: 9158,
-    driver_number: 22,
-    broadcast_name: 'Y TSUNODA',
-    full_name: 'Yuki TSUNODA',
-    name_acronym: 'TSU',
-    team_name: 'AlphaTauri',
-    team_colour: '5E8FAA',
-    first_name: 'Yuki',
-    last_name: 'Tsunoda',
-    headshot_url:
-      'https://www.formula1.com/content/dam/fom-website/drivers/Y/YUKTSU01_Yuki_Tsunoda/yuktsu01.png.transform/1col/image.png',
-    country_code: 'JPN',
-  },
-  {
-    meeting_key: 1219,
-    session_key: 9158,
-    driver_number: 23,
-    broadcast_name: 'A ALBON',
-    full_name: 'Alexander ALBON',
-    name_acronym: 'ALB',
-    team_name: 'Williams',
-    team_colour: '37BEDD',
-    first_name: 'Alexander',
-    last_name: 'Albon',
-    headshot_url:
-      'https://www.formula1.com/content/dam/fom-website/drivers/A/ALEALB01_Alexander_Albon/alealb01.png.transform/1col/image.png',
-    country_code: 'THA',
-  },
-  {
-    meeting_key: 1219,
-    session_key: 9158,
-    driver_number: 24,
-    broadcast_name: 'G ZHOU',
-    full_name: 'ZHOU Guanyu',
-    name_acronym: 'ZHO',
-    team_name: 'Alfa Romeo',
-    team_colour: 'C92D4B',
-    first_name: 'Guanyu',
-    last_name: 'Zhou',
-    headshot_url:
-      'https://www.formula1.com/content/dam/fom-website/drivers/G/GUAZHO01_Guanyu_Zhou/guazho01.png.transform/1col/image.png',
-    country_code: 'CHN',
-  },
-  {
-    meeting_key: 1219,
-    session_key: 9158,
-    driver_number: 27,
-    broadcast_name: 'N HULKENBERG',
-    full_name: 'Nico HULKENBERG',
-    name_acronym: 'HUL',
-    team_name: 'Haas F1 Team',
-    team_colour: 'B6BABD',
-    first_name: 'Nico',
-    last_name: 'Hulkenberg',
-    headshot_url:
-      'https://www.formula1.com/content/dam/fom-website/drivers/N/NICHUL01_Nico_Hulkenberg/nichul01.png.transform/1col/image.png',
-    country_code: 'GER',
-  },
-  {
-    meeting_key: 1219,
-    session_key: 9158,
-    driver_number: 31,
-    broadcast_name: 'E OCON',
-    full_name: 'Esteban OCON',
-    name_acronym: 'OCO',
-    team_name: 'Alpine',
-    team_colour: '2293D1',
-    first_name: 'Esteban',
-    last_name: 'Ocon',
-    headshot_url:
-      'https://www.formula1.com/content/dam/fom-website/drivers/E/ESTOCO01_Esteban_Ocon/estoco01.png.transform/1col/image.png',
-    country_code: 'FRA',
-  },
-  {
-    meeting_key: 1219,
-    session_key: 9158,
-    driver_number: 40,
-    broadcast_name: 'L LAWSON',
-    full_name: 'Liam LAWSON',
-    name_acronym: 'LAW',
-    team_name: 'AlphaTauri',
-    team_colour: '5E8FAA',
-    first_name: 'Liam',
-    last_name: 'Lawson',
-    headshot_url: null,
-    country_code: 'NZL',
-  },
-  {
-    meeting_key: 1219,
-    session_key: 9158,
-    driver_number: 44,
-    broadcast_name: 'L HAMILTON',
-    full_name: 'Lewis HAMILTON',
-    name_acronym: 'HAM',
-    team_name: 'Mercedes',
-    team_colour: '6CD3BF',
-    first_name: 'Lewis',
-    last_name: 'Hamilton',
-    headshot_url:
-      'https://www.formula1.com/content/dam/fom-website/drivers/L/LEWHAM01_Lewis_Hamilton/lewham01.png.transform/1col/image.png',
-    country_code: 'GBR',
-  },
-  {
-    meeting_key: 1219,
-    session_key: 9158,
-    driver_number: 55,
-    broadcast_name: 'C SAINZ',
-    full_name: 'Carlos SAINZ',
-    name_acronym: 'SAI',
-    team_name: 'Ferrari',
-    team_colour: 'F91536',
-    first_name: 'Carlos',
-    last_name: 'Sainz',
-    headshot_url:
-      'https://www.formula1.com/content/dam/fom-website/drivers/C/CARSAI01_Carlos_Sainz/carsai01.png.transform/1col/image.png',
-    country_code: 'ESP',
-  },
-  {
-    meeting_key: 1219,
-    session_key: 9158,
-    driver_number: 63,
-    broadcast_name: 'G RUSSELL',
-    full_name: 'George RUSSELL',
-    name_acronym: 'RUS',
-    team_name: 'Mercedes',
-    team_colour: '6CD3BF',
-    first_name: 'George',
-    last_name: 'Russell',
-    headshot_url:
-      'https://www.formula1.com/content/dam/fom-website/drivers/G/GEORUS01_George_Russell/georus01.png.transform/1col/image.png',
-    country_code: 'GBR',
-  },
-  {
-    meeting_key: 1219,
-    session_key: 9158,
-    driver_number: 77,
-    broadcast_name: 'V BOTTAS',
-    full_name: 'Valtteri BOTTAS',
-    name_acronym: 'BOT',
-    team_name: 'Alfa Romeo',
-    team_colour: 'C92D4B',
-    first_name: 'Valtteri',
-    last_name: 'Bottas',
-    headshot_url:
-      'https://www.formula1.com/content/dam/fom-website/drivers/V/VALBOT01_Valtteri_Bottas/valbot01.png.transform/1col/image.png',
-    country_code: 'FIN',
-  },
-  {
-    meeting_key: 1219,
-    session_key: 9158,
-    driver_number: 81,
-    broadcast_name: 'O PIASTRI',
-    full_name: 'Oscar PIASTRI',
-    name_acronym: 'PIA',
-    team_name: 'McLaren',
-    team_colour: 'F58020',
-    first_name: 'Oscar',
-    last_name: 'Piastri',
-    headshot_url:
-      'https://www.formula1.com/content/dam/fom-website/drivers/O/OSCPIA01_Oscar_Piastri/oscpia01.png.transform/1col/image.png',
-    country_code: 'AUS',
-  },
-];
+import { getDrivers, getDriversFromSession } from './driverStore';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@radix-ui/react-dropdown-menu';
+import { SidebarMenuButton } from '../../components/ui/sidebar';
+import React, { useState } from 'react';
+import { IconCaretDown } from '@tabler/icons-react';
 
 export default function DriverCards() {
+  const [session, setSession] = useState<number>(10033);
+
+  const { sessions } = getDrivers();
+  const drivers = getDriversFromSession(session);
   return (
-    <div className="p-4 grid grid-cols-1 gap-2 md:grid-cols-3">
-      {/* <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4"> */}
-      {data.map((driver) => (
-        <Card key={driver.driver_number} className="@container/card">
-          <CardHeader>
-            <CardTitle className="text-muted-foreground text-sm mt-1 font-semibold  flex items-center gap-2">
-              {driver.team_name}
-            </CardTitle>
-            <CardAction>
-              <Badge
-                variant="outline"
-                className="outline"
-                style={{ outlineColor: `#${driver.team_colour}` }}
-              >
-                #{driver.driver_number} · {driver.name_acronym}
-              </Badge>
-            </CardAction>
-          </CardHeader>
-          <CardContent className="text-xl font-semibold  flex items-center gap-2">
-            <p className="flex flex-col grow">
-              <span style={{ color: `#${driver.team_colour}` }}>
-                {driver.first_name}
-              </span>
-              <span>{driver.last_name}</span>
-              <span className="text-lg flex flex-row items-center">
-                <span className="mr-1 text-2xl ">
-                  {getCountryEmoji(driver.country_code)}
+    <div>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <SidebarMenuButton className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground border-accent border m-4 mb-0 w-auto">
+            <span className="truncate font-medium">Choose Meeting</span>
+            <IconCaretDown />
+          </SidebarMenuButton>
+        </DropdownMenuTrigger>
+        <div className="w-screen">
+          <DropdownMenuContent
+            className="rounded-lg bg-background p-4 grid-cols-5 grid"
+            align="start"
+            sideOffset={4}
+          >
+            {[...sessions?.values()].map((session) => {
+              return (
+                <DropdownMenuGroup key={session}>
+                  <DropdownMenuItem
+                    onClick={() => setSession(session as number)}
+                    className="hover:bg-amber-800 cursor-pointer p-0.5 rounded-md text-center"
+                  >
+                    {session}
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              );
+            })}
+          </DropdownMenuContent>
+        </div>
+      </DropdownMenu>
+
+      <div className="p-4 grid grid-cols-1 gap-2 md:grid-cols-3">
+        {/* <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4"> */}
+        {drivers.map((driver, index) => (
+          <Card
+            key={driver.driver_number + '-' + index}
+            className="@container/card"
+          >
+            <CardHeader>
+              <CardTitle className="text-muted-foreground text-sm mt-1 font-semibold  flex items-center gap-2">
+                {driver.team_name}
+              </CardTitle>
+              <CardAction>
+                <Badge
+                  variant="outline"
+                  className="outline"
+                  style={{ outlineColor: `#${driver.team_colour}` }}
+                >
+                  #{driver.driver_number} · {driver.name_acronym}
+                </Badge>
+              </CardAction>
+            </CardHeader>
+            <CardContent className="text-xl font-semibold  flex items-center gap-2">
+              <p className="flex flex-col grow">
+                <span style={{ color: `#${driver.team_colour}` }}>
+                  {driver.first_name}
                 </span>
-                {getCountryFullName(driver.country_code)}
-              </span>
-            </p>
-            {driver.headshot_url && (
-              <Image
-                src={driver.headshot_url}
-                alt={driver.full_name}
-                className="w-16 h-16 rounded-full"
-                width={64}
-                height={64}
-              />
-            )}
-          </CardContent>
-          {/* <CardFooter className="flex-col items-start gap-1.5 text-sm">
+                <span>{driver.last_name}</span>
+                <span className="text-lg flex flex-row items-center">
+                  <span className="mr-1 text-2xl ">
+                    {getCountryEmoji(driver.country_code)}
+                  </span>
+                  {getCountryFullName(driver.country_code)}
+                </span>
+              </p>
+              {driver.headshot_url && (
+                <Image
+                  src={driver.headshot_url}
+                  alt={driver.full_name}
+                  className="w-16 h-16 rounded-full"
+                  width={64}
+                  height={64}
+                />
+              )}
+            </CardContent>
+            {/* <CardFooter className="flex-col items-start gap-1.5 text-sm">
             <div className="line-clamp-1 flex gap-2 font-medium items-center">
               Representing {driver.country_code}{' '}
               <IconTrendingUp className="size-4" />
@@ -364,8 +111,9 @@ export default function DriverCards() {
               Competing in session {driver.session_key}
             </div>
           </CardFooter> */}
-        </Card>
-      ))}
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }

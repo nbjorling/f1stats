@@ -135,6 +135,6 @@ const getFullName = (countryCode: string) => {
 };
 
 export const getCountryFullName = (countryCode: string): string => {
-  const code = countryCode?.toUpperCase();
+  const code = countryCode.toUpperCase();
   return getFullName(code);
 };
