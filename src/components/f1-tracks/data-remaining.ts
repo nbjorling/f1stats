@@ -1,14 +1,13 @@
-import { TrackData } from "./types";
+import { TrackData } from './types';
 
 // Final batch - more accurate F1 circuits
 
 export const baku: TrackData = {
-  id: "baku",
-  name: "Baku City Circuit",
-  country: "Azerbaijan",
+  id: 'baku',
+  name: 'Baku City Circuit',
+  country: 'Azerbaijan',
   trackLength: 6003,
-  viewBox: "0 0 450 800",
-  startFinishPosition: { x: 225, y: 750, rotation: 90 },
+  viewBox: '0 0 450 800',
   // Baku - Ultra-long straight street circuit
   path: `
     M 225 750
@@ -71,12 +70,11 @@ export const baku: TrackData = {
 };
 
 export const marinaBay: TrackData = {
-  id: "marina-bay",
-  name: "Marina Bay Street Circuit",
-  country: "Singapore",
+  id: 'marina-bay',
+  name: 'Marina Bay Street Circuit',
+  country: 'Singapore',
   trackLength: 4940,
-  viewBox: "0 0 600 650",
-  startFinishPosition: { x: 300, y: 600, rotation: 0 },
+  viewBox: '0 0 600 650',
   // Marina Bay - Night race with tight corners
   path: `
     M 300 600
@@ -120,12 +118,11 @@ export const marinaBay: TrackData = {
 };
 
 export const cota: TrackData = {
-  id: "cota",
-  name: "Circuit of the Americas",
-  country: "United States",
+  id: 'cota',
+  name: 'Circuit of the Americas',
+  country: 'United States',
   trackLength: 5513,
-  viewBox: "0 0 650 600",
-  startFinishPosition: { x: 325, y: 550, rotation: 0 },
+  viewBox: '0 0 650 600',
   // COTA - Turn 1 uphill, stadium section, inspired by best corners
   path: `
     M 325 550
@@ -166,17 +163,16 @@ export const cota: TrackData = {
   pit: {
     entryT: 0.05,
     exitT: 0.12,
-    boxT: 0.10,
+    boxT: 0.1,
   },
 };
 
 export const mexico: TrackData = {
-  id: "mexico",
-  name: "Autódromo Hermanos Rodríguez",
-  country: "Mexico",
+  id: 'mexico',
+  name: 'Autódromo Hermanos Rodríguez',
+  country: 'Mexico',
   trackLength: 4304,
-  viewBox: "0 0 550 500",
-  startFinishPosition: { x: 275, y: 450, rotation: 0 },
+  viewBox: '0 0 550 500',
   // Mexico - High altitude with Peraltada and stadium section
   path: `
     M 275 450
@@ -220,12 +216,11 @@ export const mexico: TrackData = {
 };
 
 export const lasVegas: TrackData = {
-  id: "las-vegas",
-  name: "Las Vegas Strip Circuit",
-  country: "United States",
+  id: 'las-vegas',
+  name: 'Las Vegas Strip Circuit',
+  country: 'United States',
   trackLength: 6120,
-  viewBox: "0 0 450 850",
-  startFinishPosition: { x: 225, y: 800, rotation: 90 },
+  viewBox: '0 0 450 850',
   // Las Vegas - Long straight down the Strip at night
   path: `
     M 225 800
@@ -283,12 +278,11 @@ export const lasVegas: TrackData = {
 };
 
 export const lusail: TrackData = {
-  id: "lusail",
-  name: "Lusail International Circuit",
-  country: "Qatar",
+  id: 'lusail',
+  name: 'Lusail International Circuit',
+  country: 'Qatar',
   trackLength: 5380,
-  viewBox: "0 0 600 500",
-  startFinishPosition: { x: 300, y: 450, rotation: 0 },
+  viewBox: '0 0 600 500',
   // Lusail - Fast flowing desert circuit
   path: `
     M 300 450
@@ -332,12 +326,11 @@ export const lusail: TrackData = {
 };
 
 export const yasMarina: TrackData = {
-  id: "yas-marina",
-  name: "Yas Marina Circuit",
-  country: "United Arab Emirates",
+  id: 'yas-marina',
+  name: 'Yas Marina Circuit',
+  country: 'United Arab Emirates',
   trackLength: 5281,
-  viewBox: "0 0 600 550",
-  startFinishPosition: { x: 300, y: 500, rotation: 0 },
+  viewBox: '0 0 600 550',
   // Yas Marina - Twilight race with hotel section and marina
   path: `
     M 300 500

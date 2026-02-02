@@ -1,14 +1,13 @@
-import { TrackData } from "./types";
+import { TrackData } from './types';
 
 // More accurate F1 circuit tracks for 2025 calendar
 
 export const bahrain: TrackData = {
-  id: "bahrain",
-  name: "Bahrain International Circuit",
-  country: "Bahrain",
+  id: 'bahrain',
+  name: 'Bahrain International Circuit',
+  country: 'Bahrain',
   trackLength: 5412,
-  viewBox: "0 0 600 500",
-  startFinishPosition: { x: 300, y: 450, rotation: 0 },
+  viewBox: '0 0 600 500',
   // Bahrain - Desert circuit with long back straight
   path: `
     M 300 450
@@ -54,12 +53,11 @@ export const bahrain: TrackData = {
 };
 
 export const jeddah: TrackData = {
-  id: "jeddah",
-  name: "Jeddah Corniche Circuit",
-  country: "Saudi Arabia",
+  id: 'jeddah',
+  name: 'Jeddah Corniche Circuit',
+  country: 'Saudi Arabia',
   trackLength: 6174,
-  viewBox: "0 0 400 750",
-  startFinishPosition: { x: 200, y: 700, rotation: 90 },
+  viewBox: '0 0 400 750',
   // Jeddah - High-speed coastal street circuit
   path: `
     M 200 700
@@ -119,12 +117,11 @@ export const jeddah: TrackData = {
 };
 
 export const albertPark: TrackData = {
-  id: "albert-park",
-  name: "Albert Park Circuit",
-  country: "Australia",
+  id: 'albert-park',
+  name: 'Albert Park Circuit',
+  country: 'Australia',
   trackLength: 5278,
-  viewBox: "0 0 600 550",
-  startFinishPosition: { x: 300, y: 500, rotation: 0 },
+  viewBox: '0 0 600 550',
   // Albert Park - Lake circuit with fast corners
   path: `
     M 300 500
@@ -168,12 +165,11 @@ export const albertPark: TrackData = {
 };
 
 export const shanghai: TrackData = {
-  id: "shanghai",
-  name: "Shanghai International Circuit",
-  country: "China",
+  id: 'shanghai',
+  name: 'Shanghai International Circuit',
+  country: 'China',
   trackLength: 5451,
-  viewBox: "0 0 650 550",
-  startFinishPosition: { x: 325, y: 500, rotation: 0 },
+  viewBox: '0 0 650 550',
   // Shanghai - Unique snail shell Turn 1 complex
   path: `
     M 325 500
@@ -219,12 +215,11 @@ export const shanghai: TrackData = {
 };
 
 export const miami: TrackData = {
-  id: "miami",
-  name: "Miami International Autodrome",
-  country: "United States",
+  id: 'miami',
+  name: 'Miami International Autodrome',
+  country: 'United States',
   trackLength: 5410,
-  viewBox: "0 0 550 550",
-  startFinishPosition: { x: 275, y: 500, rotation: 0 },
+  viewBox: '0 0 550 550',
   // Miami - Stadium section and marina turns
   path: `
     M 275 500
@@ -269,12 +264,11 @@ export const miami: TrackData = {
 };
 
 export const imola: TrackData = {
-  id: "imola",
-  name: "Autodromo Enzo e Dino Ferrari",
-  country: "Italy",
+  id: 'imola',
+  name: 'Autodromo Enzo e Dino Ferrari',
+  country: 'Italy',
   trackLength: 4909,
-  viewBox: "0 0 550 550",
-  startFinishPosition: { x: 275, y: 500, rotation: 0 },
+  viewBox: '0 0 550 550',
   // Imola - Historic circuit with Tamburello, Villeneuve chicane, Acque Minerali
   path: `
     M 275 500
@@ -316,12 +310,11 @@ export const imola: TrackData = {
 };
 
 export const barcelona: TrackData = {
-  id: "barcelona",
-  name: "Circuit de Barcelona-Catalunya",
-  country: "Spain",
+  id: 'barcelona',
+  name: 'Circuit de Barcelona-Catalunya',
+  country: 'Spain',
   trackLength: 4675,
-  viewBox: "0 0 600 500",
-  startFinishPosition: { x: 300, y: 450, rotation: 0 },
+  viewBox: '0 0 600 500',
   // Barcelona - Test circuit with varied corners
   path: `
     M 300 450
@@ -360,17 +353,16 @@ export const barcelona: TrackData = {
   pit: {
     entryT: 0.05,
     exitT: 0.12,
-    boxT: 0.10,
+    boxT: 0.1,
   },
 };
 
 export const montreal: TrackData = {
-  id: "montreal",
-  name: "Circuit Gilles Villeneuve",
-  country: "Canada",
+  id: 'montreal',
+  name: 'Circuit Gilles Villeneuve',
+  country: 'Canada',
   trackLength: 4361,
-  viewBox: "0 0 700 400",
-  startFinishPosition: { x: 350, y: 350, rotation: 180 },
+  viewBox: '0 0 700 400',
   // Montreal - Island circuit with hairpin and casino chicane
   path: `
     M 350 350
@@ -414,12 +406,11 @@ export const montreal: TrackData = {
 };
 
 export const redBullRing: TrackData = {
-  id: "red-bull-ring",
-  name: "Red Bull Ring",
-  country: "Austria",
+  id: 'red-bull-ring',
+  name: 'Red Bull Ring',
+  country: 'Austria',
   trackLength: 4318,
-  viewBox: "0 0 550 400",
-  startFinishPosition: { x: 275, y: 350, rotation: 0 },
+  viewBox: '0 0 550 400',
   // Red Bull Ring - Short, fast Alpine circuit with elevation
   path: `
     M 275 350
@@ -463,12 +454,11 @@ export const redBullRing: TrackData = {
 };
 
 export const hungaroring: TrackData = {
-  id: "hungaroring",
-  name: "Hungaroring",
-  country: "Hungary",
+  id: 'hungaroring',
+  name: 'Hungaroring',
+  country: 'Hungary',
   trackLength: 4381,
-  viewBox: "0 0 500 550",
-  startFinishPosition: { x: 250, y: 500, rotation: 0 },
+  viewBox: '0 0 500 550',
   // Hungaroring - Tight, twisty circuit near Budapest
   path: `
     M 250 500
@@ -509,12 +499,11 @@ export const hungaroring: TrackData = {
 };
 
 export const zandvoort: TrackData = {
-  id: "zandvoort",
-  name: "Circuit Zandvoort",
-  country: "Netherlands",
+  id: 'zandvoort',
+  name: 'Circuit Zandvoort',
+  country: 'Netherlands',
   trackLength: 4259,
-  viewBox: "0 0 500 550",
-  startFinishPosition: { x: 250, y: 500, rotation: 0 },
+  viewBox: '0 0 500 550',
   // Zandvoort - Seaside circuit with banked Turn 3 and 14
   path: `
     M 250 500

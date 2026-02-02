@@ -47,7 +47,6 @@ export const monaco: TrackData = {
   country: "Monaco",
   trackLength: 3337,
   viewBox: "-100 -100 400 700",
-  startFinishPosition: { x: 250, y: 50, rotation: 90 },
   path: `M54.1136 377.561C41.6784...`,  // SVG path data
 
   sectors: {
