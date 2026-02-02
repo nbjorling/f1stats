@@ -1,4 +1,5 @@
 import {
+  IconClockEdit,
   IconHelmet,
   IconHome2,
   IconTemperature,
@@ -17,9 +18,14 @@ const menuItems = {
       icon: IconHome2,
     },
     {
-      title: 'Drivers',
+      title: 'Driver and season stats',
       url: '/drivers',
       icon: IconHelmet,
+    },
+    {
+      title: 'Live Track Dynamics',
+      url: '/track',
+      icon: IconClockEdit,
     },
     {
       title: 'Pitstops',
