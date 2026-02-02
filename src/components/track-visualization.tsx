@@ -182,8 +182,8 @@ const StaticTrackVisuals = React.memo(function StaticTrackVisuals({
                 strokeWidth="1"
               />
               <text
-                x={staticMarkers.entryPos.x - 24}
-                y={staticMarkers.entryPos.y + 14}
+                x={staticMarkers.entryPos.x + 24}
+                y={staticMarkers.entryPos.y - 14}
                 fill="white"
                 fontSize="8"
                 textAnchor="middle"
@@ -226,8 +226,8 @@ const StaticTrackVisuals = React.memo(function StaticTrackVisuals({
                 strokeWidth="1"
               />
               <text
-                x={staticMarkers.exitPos.x - 26}
-                y={staticMarkers.exitPos.y - 6}
+                x={staticMarkers.exitPos.x + 10}
+                y={staticMarkers.exitPos.y - 16}
                 fill="white"
                 fontSize="8"
                 textAnchor="middle"
@@ -335,6 +335,9 @@ export default function TrackVisualization({
     }
   }, [drivers, track, pitExitPosition]); // Remove pathRef.current dependency to avoid loop
 
+  // Find selected driver for pit exit color if needed
+  const selectedDriver = drivers.find((d) => d.driver === selectedDriverId);
+
   return (
     <svg
       viewBox={transformedViewBox}
@@ -354,7 +357,7 @@ export default function TrackVisualization({
 
         {/* Dynamic Layer - Drivers & Animations */}
         {/* Pit Exit Prediction Marker */}
-        {pitExitPos && (
+        {pitExitPos && selectedDriver && (
           <motion.g
             initial={{ opacity: 1, scale: 1 }}
             animate={{
@@ -362,18 +365,48 @@ export default function TrackVisualization({
               y: pitExitPos.y,
             }}
             transition={{
-              type: 'tween', // "tween" is cheaper than "spring"
+              type: 'tween',
               ease: 'linear',
               duration: 0.333,
             }}
             exit={{ opacity: 0, scale: 0.5 }}
           >
             <circle
+              cx={0}
+              cy={0}
+              r="15"
+              fill={selectedDriver?.color}
+              className="opacity-40 animate-ping"
+            />
+            <circle
               r="12"
               fill="rgba(41, 121, 255, 0.2)"
               className="animate-pulse"
             />
-            <circle r="5" fill="#2979FF" stroke="white" strokeWidth="2" />
+            <circle
+              r="10"
+              fill={selectedDriver?.color}
+              stroke="white"
+              strokeWidth="1"
+            />
+            <text
+              x="0"
+              y="0"
+              textAnchor="middle"
+              dominantBaseline="central"
+              fill={
+                (
+                  parseInt(selectedDriver.color.replace('#', ''), 16) >
+                  0xffffff / 7
+                ) ?
+                  'black'
+                : 'white'
+              }
+              fontSize="8"
+              className="font-bold pointer-events-none select-none font-mono"
+            >
+              P/E
+            </text>
           </motion.g>
         )}
 

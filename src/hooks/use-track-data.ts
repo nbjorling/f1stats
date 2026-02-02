@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from 'react';
 
 export interface DriverData {
   driver: number;
@@ -10,16 +10,16 @@ export interface DriverData {
 }
 
 const DRIVERS = [
-  { id: 1, color: "#3671C6" }, // Verstappen (Red Bull)
-  { id: 11, color: "#3671C6" }, // Perez (Red Bull)
-  { id: 4, color: "#FF8000" }, // Norris (McLaren)
-  { id: 81, color: "#FF8000" }, // Piastri (McLaren)
-  { id: 16, color: "#E80020" }, // Leclerc (Ferrari)
-  { id: 55, color: "#E80020" }, // Sainz (Ferrari)
-  { id: 44, color: "#27F4D2" }, // Hamilton (Mercedes)
-  { id: 63, color: "#27F4D2" }, // Russell (Mercedes)
-  { id: 14, color: "#229971" }, // Alonso (Aston Martin)
-  { id: 18, color: "#229971" }, // Stroll (Aston Martin)
+  { id: 1, color: '#3671C6' }, // Verstappen (Red Bull)
+  { id: 11, color: '#3671C6' }, // Perez (Red Bull)
+  { id: 4, color: '#FF8000' }, // Norris (McLaren)
+  { id: 81, color: '#FF8000' }, // Piastri (McLaren)
+  { id: 16, color: '#E80020' }, // Leclerc (Ferrari)
+  { id: 55, color: '#E80020' }, // Sainz (Ferrari)
+  { id: 44, color: '#27F4D2' }, // Hamilton (Mercedes)
+  { id: 63, color: '#27F4D2' }, // Russell (Mercedes)
+  { id: 14, color: '#229971' }, // Alonso (Aston Martin)
+  { id: 18, color: '#229971' }, // Stroll (Aston Martin)
 ];
 
 const LAP_TIME = 90; // seconds
@@ -33,7 +33,7 @@ export function useTrackData() {
       positionOnTrack: 1 - i * 0.05, // Staggered start
       gapToLeader: i * 1.5,
       color: d.color,
-    }))
+    })),
   );
 
   useEffect(() => {
@@ -41,7 +41,9 @@ export function useTrackData() {
       const newState = stateRef.current.map((d, i) => {
         // Move car forward based on time passed
         // Slightly random speed to simulate gaps changing
-        const progress = (TICK_INTERVAL / 1000 / LAP_TIME) * (1 + (Math.random() - 0.5) * 0.01);
+        const progress =
+          (TICK_INTERVAL / 1000 / LAP_TIME) *
+          (1 + (Math.random() - 0.5) * 0.01);
         let newPos = d.positionOnTrack + progress;
         if (newPos >= 1) newPos -= 1;
 

@@ -77,7 +77,7 @@ export default function TrackDashboard() {
                   )
                 }
                 className={cn(
-                  'flex items-center justify-between p-2 rounded-lg cursor-pointer transition-colors',
+                  'flex items-center justify-between bg-white/5 px-2 rounded-sm cursor-pointer transition-colors',
                   selectedDriverId === d.driver ?
                     'bg-white/10 ring-1 ring-white/20'
                   : 'hover:bg-white/5',
@@ -85,10 +85,10 @@ export default function TrackDashboard() {
               >
                 <div className="flex items-center gap-3">
                   <div
-                    className="w-1 h-6 rounded-full"
+                    className="w-1 h-6 rounded-sm"
                     style={{ backgroundColor: d.color }}
                   />
-                  <span className="font-bold text-lg">
+                  <span className="font-bold text-sm">
                     P{drivers.indexOf(d) + 1}
                   </span>
                   <span className="text-sm font-mono text-gray-300">
@@ -96,9 +96,6 @@ export default function TrackDashboard() {
                   </span>
                 </div>
                 <div className="text-right">
-                  <span className="text-xs font-mono text-gray-500 block">
-                    GAP
-                  </span>
                   <span className="text-sm font-mono">
                     {d.gapToLeader > 0 ?
                       '+' + d.gapToLeader.toFixed(3) + 's'
