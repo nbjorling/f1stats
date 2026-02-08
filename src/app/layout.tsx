@@ -20,38 +20,6 @@ export const metadata: Metadata = {
   description: 'Created by nbjorling',
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en">
-      <body
-        // className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
-        className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
-      >
-        <SidebarProvider
-          style={
-            {
-              '--sidebar-width': 'calc(var(--spacing) * 72)',
-              '--header-height': 'calc(var(--spacing) * 12)',
-            } as React.CSSProperties
-          }
-        >
-          <AppSidebar variant="inset" />
-          <SidebarInset>
-            <>
-              <SiteHeader />
-              {children}
-            </>
-          </SidebarInset>
-        </SidebarProvider>
-      </body>
-    </html>
-  );
-}
-
 // export default function RootLayout({
 //   children,
 // }: Readonly<{
@@ -60,10 +28,42 @@ export default function RootLayout({
 //   return (
 //     <html lang="en">
 //       <body
-//         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+//         // className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
+//         className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
 //       >
+//         <SidebarProvider
+//           style={
+//             {
+//               '--sidebar-width': 'calc(var(--spacing) * 72)',
+//               '--header-height': 'calc(var(--spacing) * 12)',
+//             } as React.CSSProperties
+//           }
+//         >
+//           <AppSidebar variant="inset" />
+//           <SidebarInset>
+//             <>
+//               <SiteHeader />
 //         {children}
+//         </>
+//           </SidebarInset>
+//         </SidebarProvider>
 //       </body>
 //     </html>
 //   );
 // }
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        {children}
+      </body>
+    </html>
+  );
+}

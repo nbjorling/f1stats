@@ -47,6 +47,10 @@ export interface SessionResult {
   grid_position?: number;
   status?: number;
   is_pit_stop?: boolean;
+  name_acronym?: string;
+  team_colour?: string;
+  time?: string; // For quali/practice best lap
+  gap_to_leader?: string; // For race
 }
 
 export interface DriverStanding {

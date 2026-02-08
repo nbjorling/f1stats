@@ -19,12 +19,12 @@ const menuItems = {
     },
     {
       title: 'Driver and season stats',
-      url: '/drivers',
+      url: '/season-stats',
       icon: IconHelmet,
     },
     {
       title: 'Live Track Dynamics',
-      url: '/track',
+      url: '/live',
       icon: IconClockEdit,
     },
     {
