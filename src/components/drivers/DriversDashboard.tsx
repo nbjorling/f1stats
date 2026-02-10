@@ -16,7 +16,7 @@ export function DriversDashboard({ seasonStats }: DriversDashboardProps) {
     .map((stat) => stat.driver_info!);
 
   return (
-    <div className="container mx-auto p-6 space-y-8">
+    <div className="container mx-auto space-y-8">
       <PointsChart data={seasonStats} nToShow={10} />
 
       <div>

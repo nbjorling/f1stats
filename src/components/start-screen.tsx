@@ -1,3 +1,5 @@
+'use client';
+
 import { motion } from 'framer-motion';
 import { Activity, CalendarDays, Trophy, Disc3 } from 'lucide-react';
 import { useState } from 'react';
@@ -22,6 +24,15 @@ export function StartScreen({ onSelectView }: StartScreenProps) {
       color: 'from-cyan-500/20 to-blue-500/20',
       hoverColor: 'group-hover:from-cyan-500/30 group-hover:to-blue-500/30',
       iconColor: 'text-cyan-400',
+    },
+    {
+      id: 'season-stats',
+      title: 'Season Statistics',
+      description: 'Driver standings, constructor points, and race results.',
+      icon: Trophy,
+      color: 'from-amber-500/20 to-orange-500/20',
+      hoverColor: 'group-hover:from-amber-500/30 group-hover:to-orange-500/30',
+      iconColor: 'text-amber-400',
     },
     {
       id: 'calendar',
@@ -49,15 +60,6 @@ export function StartScreen({ onSelectView }: StartScreenProps) {
       color: 'from-blue-500/20 to-cyan-500/20',
       hoverColor: 'group-hover:from-blue-500/30 group-hover:to-cyan-500/30',
       iconColor: 'text-cyan-400',
-    },
-    {
-      id: 'season-stats',
-      title: 'Season Statistics',
-      description: 'Driver standings, constructor points, and race results.',
-      icon: Trophy,
-      color: 'from-amber-500/20 to-orange-500/20',
-      hoverColor: 'group-hover:from-amber-500/30 group-hover:to-orange-500/30',
-      iconColor: 'text-amber-400',
     },
   ];
 
