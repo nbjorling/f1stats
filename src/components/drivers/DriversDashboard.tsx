@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import { DriverSeasonStats } from '@/lib/types';
 import { PointsChart } from './PointsChart';
 import DriverCards from './DriverCards';
@@ -13,9 +12,8 @@ interface DriversDashboardProps {
 export function DriversDashboard({ seasonStats }: DriversDashboardProps) {
   // Extract latest driver info from stats for the cards, sorted by total points
   const currentDrivers = seasonStats
-    .filter(stat => !!stat.driver_info)
-    .map(stat => stat.driver_info!);
-
+    .filter((stat) => !!stat.driver_info)
+    .map((stat) => stat.driver_info!);
 
   return (
     <div className="container mx-auto p-6 space-y-8">

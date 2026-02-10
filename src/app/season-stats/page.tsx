@@ -19,11 +19,11 @@ export default async function DriversPage({ searchParams }: PageProps) {
           {[2024, 2025].map((y) => (
             <a
               key={y}
-              href={`/drivers?year=${y}`}
+              href={`/season-stats?year=${y}`}
               className={`px-4 py-2 rounded-lg transition-colors ${
-                year === y
-                  ? 'bg-red-600 text-white'
-                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                year === y ?
+                  'bg-red-600 text-white'
+                : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
               }`}
             >
               {y}
@@ -32,11 +32,14 @@ export default async function DriversPage({ searchParams }: PageProps) {
         </div>
       </div>
       <p className="text-gray-400 mb-4 mx-8">
-        Track the points progression of every driver throughout the {year} season.
+        Track the points progression of every driver throughout the {year}{' '}
+        season.
       </p>
 
-      <Suspense fallback={<div className="p-10 text-center">Loading F1 Data...</div>}>
-         <DriversDashboard seasonStats={seasonStats} year={year} />
+      <Suspense
+        fallback={<div className="p-10 text-center">Loading F1 Data...</div>}
+      >
+        <DriversDashboard seasonStats={seasonStats} year={year} />
       </Suspense>
     </div>
   );

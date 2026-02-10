@@ -4,17 +4,6 @@ import WeatherCard from '../../components/weathercard';
 import { Slider } from '../../components/ui/slider';
 import { LineChart, Line, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { Card } from '../../components/ui/card';
-// const weather = {
-//   air_temperature: 25,
-//   track_temperature: 30,
-//   humidity: 60,
-//   pressure: 1013,
-//   wind_speed: 5,
-//   wind_direction: 180,
-//   rainfall: 0,
-//   date: '2025-05-01T14:00:00Z',
-// };
-
 
 interface Weather {
   air_temperature: number;
@@ -41,7 +30,7 @@ export default function PitStops() {
       setLoading(true);
       try {
         const sessionRes = await fetch(
-          'https://api.openf1.org/v1/sessions?session_name=Race&year=2025'
+          'https://api.openf1.org/v1/sessions?session_name=Race&year=2025',
         );
         const sessions = await sessionRes.json();
         if (sessions.length === 0) return;
@@ -49,7 +38,7 @@ export default function PitStops() {
         const { session_key } = sessions.at(-1);
 
         const weatherRes = await fetch(
-          `https://api.openf1.org/v1/weather?session_key=${session_key}`
+          `https://api.openf1.org/v1/weather?session_key=${session_key}`,
         );
 
         weatherRes.json().then((data) => {
@@ -78,17 +67,16 @@ export default function PitStops() {
     <div className="p-6">
       <h1 className="text-2xl font-bold my-4">Racetrack</h1>
 
-      {!weatherData || loading ? (
+      {!weatherData || loading ?
         <div className="text-center text-gray-500">Loading...</div>
-      ) : (
-        <>
+      : <>
           <div className="w-full flex justify-between">
             <div>
               {new Date(weatherData[0].date).toLocaleTimeString('sv-SE')}
             </div>
             <div>
               {new Date(
-                weatherData[weatherData.length - 1].date
+                weatherData[weatherData.length - 1].date,
               ).toLocaleTimeString('sv-SE')}
             </div>
           </div>
@@ -124,7 +112,7 @@ export default function PitStops() {
             </div>
           </Card>
         </>
-      )}
+      }
     </div>
   );
 }
