@@ -79,3 +79,42 @@ export interface DriverSeasonStats {
   history: RacePoints[];
   total_points: number;
 }
+
+export interface TyreStint {
+  compound: 'SOFT' | 'MEDIUM' | 'HARD' | 'INTERMEDIATE' | 'WET';
+  driver_number: number;
+  lap_end: number;
+  lap_start: number;
+  meeting_key: number;
+  session_key: number;
+  stint_number: number;
+  tyre_age_at_start: number;
+}
+
+export interface TrackTyreInfo {
+  meeting_key: number;
+  meeting_name: string;
+  location: string;
+  country_code: string;
+  date_start: string;
+  date_end: string;
+  compounds: string[];
+  race_session_key?: number;
+}
+
+export interface TeammateBattle {
+  team_name: string;
+  team_colour: string;
+  driver1: Driver;
+  driver2: Driver;
+  quali_battle: { driver1_wins: number; driver2_wins: number };
+  race_pace: { driver1_avg: number; driver2_avg: number };
+  points: { driver1_points: number; driver2_points: number };
+  consistency: {
+    driver1_dnfs: number;
+    driver2_dnfs: number;
+    total_races: number;
+  };
+  head_to_head: { driver1_ahead: number; driver2_ahead: number };
+  fastest_laps: { driver1_count: number; driver2_count: number };
+}

@@ -1,0 +1,260 @@
+[
+  {
+    "meeting_key": 1304,
+    "meeting_name": "Bahrain",
+    "location": "Bahrain",
+    "country_code": "BRN",
+    "date_start": "2026-02-11T07:00:00+00:00",
+    "date_end": "2026-02-13T16:00:00+00:00",
+    "compounds": {}
+  },
+  {
+    "meeting_key": 1305,
+    "meeting_name": "Bahrain",
+    "location": "Bahrain",
+    "country_code": "BRN",
+    "date_start": "2026-02-18T07:00:00+00:00",
+    "date_end": "2026-02-20T16:00:00+00:00",
+    "compounds": {}
+  },
+  {
+    "meeting_key": 1279,
+    "meeting_name": "Australia",
+    "location": "Melbourne",
+    "country_code": "AUS",
+    "date_start": "2026-03-06T01:30:00+00:00",
+    "date_end": "2026-03-08T06:00:00+00:00",
+    "compounds": {},
+    "race_session_key": 11234
+  },
+  {
+    "meeting_key": 1280,
+    "meeting_name": "China",
+    "location": "Shanghai",
+    "country_code": "CHN",
+    "date_start": "2026-03-13T03:30:00+00:00",
+    "date_end": "2026-03-15T09:00:00+00:00",
+    "compounds": {},
+    "race_session_key": 11245
+  },
+  {
+    "meeting_key": 1281,
+    "meeting_name": "Japan",
+    "location": "Suzuka",
+    "country_code": "JPN",
+    "date_start": "2026-03-27T02:30:00+00:00",
+    "date_end": "2026-03-29T07:00:00+00:00",
+    "compounds": {},
+    "race_session_key": 11253
+  },
+  {
+    "meeting_key": 1282,
+    "meeting_name": "Bahrain",
+    "location": "Sakhir",
+    "country_code": "BRN",
+    "date_start": "2026-04-10T11:30:00+00:00",
+    "date_end": "2026-04-12T17:00:00+00:00",
+    "compounds": {},
+    "race_session_key": 11261
+  },
+  {
+    "meeting_key": 1283,
+    "meeting_name": "Saudi Arabia",
+    "location": "Jeddah",
+    "country_code": "KSA",
+    "date_start": "2026-04-17T13:30:00+00:00",
+    "date_end": "2026-04-19T19:00:00+00:00",
+    "compounds": {},
+    "race_session_key": 11269
+  },
+  {
+    "meeting_key": 1284,
+    "meeting_name": "United States",
+    "location": "Miami Gardens",
+    "country_code": "USA",
+    "date_start": "2026-05-01T16:30:00+00:00",
+    "date_end": "2026-05-03T22:00:00+00:00",
+    "compounds": {},
+    "race_session_key": 11280
+  },
+  {
+    "meeting_key": 1285,
+    "meeting_name": "Canada",
+    "location": "Montréal",
+    "country_code": "CAN",
+    "date_start": "2026-05-22T16:30:00+00:00",
+    "date_end": "2026-05-24T22:00:00+00:00",
+    "compounds": {},
+    "race_session_key": 11291
+  },
+  {
+    "meeting_key": 1286,
+    "meeting_name": "Monaco",
+    "location": "Monte Carlo",
+    "country_code": "MON",
+    "date_start": "2026-06-05T11:30:00+00:00",
+    "date_end": "2026-06-07T15:00:00+00:00",
+    "compounds": {},
+    "race_session_key": 11299
+  },
+  {
+    "meeting_key": 1287,
+    "meeting_name": "Spain",
+    "location": "Barcelona",
+    "country_code": "ESP",
+    "date_start": "2026-06-12T11:30:00+00:00",
+    "date_end": "2026-06-14T15:00:00+00:00",
+    "compounds": {},
+    "race_session_key": 11307
+  },
+  {
+    "meeting_key": 1288,
+    "meeting_name": "Austria",
+    "location": "Spielberg",
+    "country_code": "AUT",
+    "date_start": "2026-06-26T11:30:00+00:00",
+    "date_end": "2026-06-28T15:00:00+00:00",
+    "compounds": {},
+    "race_session_key": 11315
+  },
+  {
+    "meeting_key": 1289,
+    "meeting_name": "United Kingdom",
+    "location": "Silverstone",
+    "country_code": "GBR",
+    "date_start": "2026-07-03T11:30:00+00:00",
+    "date_end": "2026-07-05T16:00:00+00:00",
+    "compounds": {},
+    "race_session_key": 11326
+  },
+  {
+    "meeting_key": 1290,
+    "meeting_name": "Belgium",
+    "location": "Spa-Francorchamps",
+    "country_code": "BEL",
+    "date_start": "2026-07-17T11:30:00+00:00",
+    "date_end": "2026-07-19T15:00:00+00:00",
+    "compounds": {},
+    "race_session_key": 11334
+  },
+  {
+    "meeting_key": 1291,
+    "meeting_name": "Hungary",
+    "location": "Budapest",
+    "country_code": "HUN",
+    "date_start": "2026-07-24T11:30:00+00:00",
+    "date_end": "2026-07-26T15:00:00+00:00",
+    "compounds": {},
+    "race_session_key": 11342
+  },
+  {
+    "meeting_key": 1292,
+    "meeting_name": "Netherlands",
+    "location": "Zandvoort",
+    "country_code": "NED",
+    "date_start": "2026-08-21T10:30:00+00:00",
+    "date_end": "2026-08-23T15:00:00+00:00",
+    "compounds": {},
+    "race_session_key": 11353
+  },
+  {
+    "meeting_key": 1293,
+    "meeting_name": "Italy",
+    "location": "Monza",
+    "country_code": "ITA",
+    "date_start": "2026-09-04T10:30:00+00:00",
+    "date_end": "2026-09-06T15:00:00+00:00",
+    "compounds": {},
+    "race_session_key": 11361
+  },
+  {
+    "meeting_key": 1294,
+    "meeting_name": "Spain",
+    "location": "Madrid",
+    "country_code": "ESP",
+    "date_start": "2026-09-11T11:30:00+00:00",
+    "date_end": "2026-09-13T15:00:00+00:00",
+    "compounds": {},
+    "race_session_key": 11369
+  },
+  {
+    "meeting_key": 1295,
+    "meeting_name": "Azerbaijan",
+    "location": "Baku",
+    "country_code": "AZE",
+    "date_start": "2026-09-24T08:30:00+00:00",
+    "date_end": "2026-09-26T13:00:00+00:00",
+    "compounds": {},
+    "race_session_key": 11377
+  },
+  {
+    "meeting_key": 1296,
+    "meeting_name": "Singapore",
+    "location": "Marina Bay",
+    "country_code": "SGP",
+    "date_start": "2026-10-09T08:30:00+00:00",
+    "date_end": "2026-10-11T14:00:00+00:00",
+    "compounds": {},
+    "race_session_key": 11388
+  },
+  {
+    "meeting_key": 1297,
+    "meeting_name": "United States",
+    "location": "Austin",
+    "country_code": "USA",
+    "date_start": "2026-10-23T17:30:00+00:00",
+    "date_end": "2026-10-25T22:00:00+00:00",
+    "compounds": {},
+    "race_session_key": 11396
+  },
+  {
+    "meeting_key": 1298,
+    "meeting_name": "Mexico",
+    "location": "Mexico City",
+    "country_code": "MEX",
+    "date_start": "2026-10-30T18:30:00+00:00",
+    "date_end": "2026-11-01T22:00:00+00:00",
+    "compounds": {},
+    "race_session_key": 11404
+  },
+  {
+    "meeting_key": 1299,
+    "meeting_name": "Brazil",
+    "location": "São Paulo",
+    "country_code": "BRA",
+    "date_start": "2026-11-06T15:30:00+00:00",
+    "date_end": "2026-11-08T19:00:00+00:00",
+    "compounds": {},
+    "race_session_key": 11412
+  },
+  {
+    "meeting_key": 1300,
+    "meeting_name": "United States",
+    "location": "Las Vegas",
+    "country_code": "USA",
+    "date_start": "2026-11-20T00:30:00+00:00",
+    "date_end": "2026-11-22T06:00:00+00:00",
+    "compounds": {},
+    "race_session_key": 11420
+  },
+  {
+    "meeting_key": 1301,
+    "meeting_name": "Qatar",
+    "location": "Lusail",
+    "country_code": "QAT",
+    "date_start": "2026-11-27T13:30:00+00:00",
+    "date_end": "2026-11-29T18:00:00+00:00",
+    "compounds": {},
+    "race_session_key": 11428
+  },
+  {
+    "meeting_key": 1302,
+    "meeting_name": "United Arab Emirates",
+    "location": "Yas Marina",
+    "country_code": "UAE",
+    "date_start": "2026-12-04T09:30:00+00:00",
+    "date_end": "2026-12-06T15:00:00+00:00",
+    "compounds": {},
+    "race_session_key": 11436
+  }
+]

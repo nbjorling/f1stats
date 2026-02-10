@@ -201,7 +201,6 @@ export default async function CalendarPage({
             <div>
               <h1 className="text-xl font-bold tracking-tight">F1 Calendar</h1>
               <div className="flex items-center gap-2 text-xs font-medium text-zinc-400">
-                <span>Season {year}</span>
                 <div className="flex gap-1 bg-zinc-900/50 rounded-lg p-0.5 border border-zinc-800">
                   {availableYears.map((y) => (
                     <Link

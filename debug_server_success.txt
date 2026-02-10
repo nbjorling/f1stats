@@ -1,1 +1,0 @@
-Successfully calculated points for 25 drivers. Cwd: /Users/niklasbjorling/my_projects/f1statsnext
