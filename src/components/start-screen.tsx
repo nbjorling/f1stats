@@ -8,6 +8,7 @@ import {
   Disc3,
   GitGraph,
   LineChart,
+  Radio,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -56,11 +57,22 @@ export function StartScreen() {
     {
       id: 'live',
       title: 'Live Track Statistics',
-      description: 'Real-time telemetry, track position, and sector times.',
+      description:
+        'Real-time telemetry, track position, and sector times (Mock).',
       icon: Activity,
       color: 'from-blue-500/20 to-cyan-500/20',
       hoverColor: 'group-hover:from-blue-500/30 group-hover:to-cyan-500/30',
       iconColor: 'text-cyan-400',
+    },
+    {
+      id: 'pit-wall',
+      title: 'Pit Wall Master',
+      description:
+        'Professional-grade real-time telemetry and strategy command.',
+      icon: Radio,
+      color: 'from-red-600/20 to-zinc-900/20',
+      hoverColor: 'group-hover:from-red-600/30 group-hover:to-zinc-900/30',
+      iconColor: 'text-red-500',
     },
   ];
 

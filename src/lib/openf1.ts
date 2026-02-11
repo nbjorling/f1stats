@@ -9,6 +9,8 @@ import {
   TyreStint,
   TrackTyreInfo,
   TeammateBattle,
+  Lap,
+  TelemetryLocation,
 } from './types';
 
 import { openF1Client } from './api-client';
@@ -650,4 +652,100 @@ export async function getTeamBattles(year: number): Promise<TeammateBattle[]> {
   }
 
   return battles;
+}
+
+export async function getLatestSession(): Promise<Session | null> {
+  const currentYear = new Date().getFullYear();
+  try {
+    // Try current year first
+    const sessions = await getAllSessions(currentYear);
+    if (sessions.length > 0) {
+      const now = new Date();
+
+      // Find all sessions that have already started or are about to start (within 2 hours)
+      const eligibleSessions = sessions.filter((s) => {
+        const startDate = new Date(s.date_start);
+        // Padding of 2 hours for "upcoming" sessions to be visible
+        return startDate.getTime() <= now.getTime() + 2 * 60 * 60 * 1000;
+      });
+
+      if (eligibleSessions.length > 0) {
+        // Sort by start date DESC to get the most recent one
+        const sorted = eligibleSessions.sort(
+          (a, b) =>
+            new Date(b.date_start).getTime() - new Date(a.date_start).getTime(),
+        );
+
+        // If multiple sessions started recently (e.g. within a weekend),
+        // prefer sessions that are currently active (now between start and end)
+        const active = sorted.find((s) => {
+          const start = new Date(s.date_start).getTime();
+          const end = new Date(s.date_end).getTime();
+          return now.getTime() >= start && now.getTime() <= end;
+        });
+
+        if (active) return active;
+
+        // Otherwise return the most recent one that started
+        return sorted[0];
+      }
+    }
+
+    // Fallback to previous year if current year has no sessions that have started yet
+    const prevSessions = await getAllSessions(currentYear - 1);
+    if (prevSessions.length > 0) {
+      // Return the very last session of the previous year
+      return [...prevSessions].sort(
+        (a, b) =>
+          new Date(b.date_start).getTime() - new Date(a.date_start).getTime(),
+      )[0];
+    }
+  } catch (e) {
+    console.error('Failed to get latest session', e);
+  }
+  return null;
+}
+
+export async function getLatestLapData(sessionKey: number): Promise<Lap[]> {
+  try {
+    // Fetch all laps for the session
+    // In a real scenario, we might want to filter by most recent date to minimize data
+    const laps = await openF1Client.fetch<Lap[]>(
+      `/laps?session_key=${sessionKey}`,
+    );
+
+    // Group by driver and take the latest lap for each
+    const driverLapsMap = new Map<number, Lap>();
+    laps.forEach((lap) => {
+      const current = driverLapsMap.get(lap.driver_number);
+      if (!current || lap.lap_number > current.lap_number) {
+        driverLapsMap.set(lap.driver_number, lap);
+      }
+    });
+
+    return Array.from(driverLapsMap.values());
+  } catch (e) {
+    console.error(
+      `Failed to fetch latest lap data for session ${sessionKey}`,
+      e,
+    );
+    return [];
+  }
+}
+
+export async function getTelemetry(
+  sessionKey: number,
+  driverNumber: number,
+  startTime?: string,
+): Promise<TelemetryLocation[]> {
+  try {
+    let url = `/location?session_key=${sessionKey}&driver_number=${driverNumber}`;
+    if (startTime) {
+      url += `&date>${startTime}`;
+    }
+    return await openF1Client.fetch<TelemetryLocation[]>(url);
+  } catch (e) {
+    console.error(`Failed to fetch telemetry for driver ${driverNumber}`, e);
+    return [];
+  }
 }
