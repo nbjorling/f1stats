@@ -1,3 +1,5 @@
+import { log } from 'console';
+
 const API_BASE = 'https://api.openf1.org/v1';
 const RATE_LIMIT_DELAY = 400; // 350ms limit + 50ms safety buffer
 
@@ -12,6 +14,8 @@ class OpenF1Client {
   private queue: QueueItem[] = [];
   private processing = false;
   private lastRequestTime = 0;
+  private accessToken: string | null = null;
+  private tokenExpiresAt: number = 0;
 
   /**
    * Fetch data from OpenF1 API with rate limiting and queuing.
@@ -60,6 +64,58 @@ class OpenF1Client {
     this.processing = false;
   }
 
+  private async getAccessToken(): Promise<string | null> {
+    const now = Date.now();
+    // buffer execution by 10s
+    if (this.accessToken && now < this.tokenExpiresAt - 10000) {
+      return this.accessToken;
+    }
+
+    const username = process.env.OPENF1_USERNAME;
+    const password = process.env.OPENF1_PASSWORD;
+    console.log('[API] Username:', username);
+    console.log('[API] Password:', password);
+    if (!username || !password) {
+      return null;
+    }
+
+    try {
+      console.log('[API] Authenticating...');
+      const params = new URLSearchParams();
+      params.append('username', username);
+      params.append('password', password);
+
+      const res = await fetch('https://api.openf1.org/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: params,
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        this.accessToken = data.access_token;
+        // expires_in is in seconds, convert to ms and set absolute time
+        this.tokenExpiresAt = now + data.expires_in * 1000;
+        console.log(
+          `[API] Authenticated. Token expires in ${data.expires_in}s`,
+        );
+        return this.accessToken;
+      } else {
+        console.error(
+          '[API] Authentication failed:',
+          res.status,
+          await res.text(),
+        );
+        return null;
+      }
+    } catch (e) {
+      console.error('[API] Authentication network error:', e);
+      return null;
+    }
+  }
+
   private async executeRequest(
     url: string,
     options?: RequestInit,
@@ -67,11 +123,36 @@ class OpenF1Client {
   ): Promise<any> {
     for (let i = 0; i < retries; i++) {
       try {
+        // Prepare headers
+        const headers = { ...options?.headers } as Record<string, string>;
+
+        // prioritized auth:
+        // 1. Try to get a fresh access token (User/Pass)
+        const token = await this.getAccessToken();
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        } else if (process.env.OPENF1_API_KEY) {
+          // Fallback to static API key if no user/pass token available
+          headers['Authorization'] = `Bearer ${process.env.OPENF1_API_KEY}`;
+        }
+
         console.log(`[API] Fetching ${url}`);
-        const res = await fetch(url, { ...options, cache: 'no-store' }); // Always fresh for scripts, rely on local cache for app
+        const res = await fetch(url, {
+          ...options,
+          headers,
+          cache: 'no-store',
+        }); // Always fresh for scripts, rely on local cache for app
 
         if (res.ok) {
           return await res.json();
+        }
+
+        if (res.status === 401) {
+          console.warn(
+            `[API] 401 Unauthorized for ${url}. clearing token and retrying...`,
+          );
+          this.accessToken = null; // force refresh
+          // The next loop iteration will call getAccessToken again.
         }
 
         if (res.status === 429) {

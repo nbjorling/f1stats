@@ -80,11 +80,43 @@ export function DriverComparison({ standings }: DriverComparisonProps) {
 
     // Best Finish
     const d1Best = Math.min(
-      ...d1.history.filter((r) => r.position).map((r) => r.position || 999),
+      ...d1.history.filter((r) => r.position > 0).map((r) => r.position),
     );
     const d2Best = Math.min(
-      ...d2.history.filter((r) => r.position).map((r) => r.position || 999),
+      ...d2.history.filter((r) => r.position > 0).map((r) => r.position),
     );
+
+    // Qualifying H2H
+    let d1QualiWins = 0;
+    let d2QualiWins = 0;
+    const d2QualiMap = new Map(
+      (d2.qualifying_history || []).map((q) => [q.meeting_key, q]),
+    );
+
+    (d1.qualifying_history || []).forEach((q1) => {
+      const q2 = d2QualiMap.get(q1.meeting_key);
+      if (q2 && q1.position > 0 && q2.position > 0) {
+        if (q1.position < q2.position) d1QualiWins++;
+        else if (q2.position < q1.position) d2QualiWins++;
+      }
+    });
+
+    // Avg Finish
+    const d1Finishes = d1.history.filter((r) => r.is_classified);
+    const d2Finishes = d2.history.filter((r) => r.is_classified);
+
+    const d1AvgFinish =
+      d1Finishes.length > 0 ?
+        d1Finishes.reduce((sum, r) => sum + r.position, 0) / d1Finishes.length
+      : 0;
+    const d2AvgFinish =
+      d2Finishes.length > 0 ?
+        d2Finishes.reduce((sum, r) => sum + r.position, 0) / d2Finishes.length
+      : 0;
+
+    // DNFs / DNS
+    const d1Dnfs = d1.history.filter((r) => !r.is_classified).length;
+    const d2Dnfs = d2.history.filter((r) => !r.is_classified).length;
 
     return {
       points: {
@@ -95,9 +127,21 @@ export function DriverComparison({ standings }: DriverComparisonProps) {
         d1: d1RaceWins,
         d2: d2RaceWins,
       },
+      qualiH2H: {
+        d1: d1QualiWins,
+        d2: d2QualiWins,
+      },
       bestFinish: {
-        d1: d1Best === 999 ? 0 : d1Best,
-        d2: d2Best === 999 ? 0 : d2Best,
+        d1: d1Best === Infinity ? 0 : d1Best,
+        d2: d2Best === Infinity ? 0 : d2Best,
+      },
+      avgFinish: {
+        d1: d1AvgFinish,
+        d2: d2AvgFinish,
+      },
+      dnfs: {
+        d1: d1Dnfs,
+        d2: d2Dnfs,
       },
     };
   }, [driver1, driver2]);
@@ -240,9 +284,32 @@ export function DriverComparison({ standings }: DriverComparisonProps) {
                     driver2Name={driver2.driver_info.name_acronym}
                   />
                   <BattleMetric
+                    label="Qualifying Head-to-Head"
+                    driver1Score={stats.qualiH2H.d1}
+                    driver2Score={stats.qualiH2H.d2}
+                    driver1Name={driver1.driver_info.name_acronym}
+                    driver2Name={driver2.driver_info.name_acronym}
+                  />
+                  <BattleMetric
                     label="Best Race Finish"
                     driver1Score={stats.bestFinish.d1}
                     driver2Score={stats.bestFinish.d2}
+                    driver1Name={driver1.driver_info.name_acronym}
+                    driver2Name={driver2.driver_info.name_acronym}
+                    reverse={true}
+                  />
+                  <BattleMetric
+                    label="Average Race Finish"
+                    driver1Score={Number(stats.avgFinish.d1.toFixed(1))}
+                    driver2Score={Number(stats.avgFinish.d2.toFixed(1))}
+                    driver1Name={driver1.driver_info.name_acronym}
+                    driver2Name={driver2.driver_info.name_acronym}
+                    reverse={true}
+                  />
+                  <BattleMetric
+                    label="DNFs / DNSs"
+                    driver1Score={stats.dnfs.d1}
+                    driver2Score={stats.dnfs.d2}
                     driver1Name={driver1.driver_info.name_acronym}
                     driver2Name={driver2.driver_info.name_acronym}
                     reverse={true}

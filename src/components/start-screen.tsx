@@ -1,20 +1,21 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Activity, CalendarDays, Trophy, Disc3 } from 'lucide-react';
+import {
+  Activity,
+  CalendarDays,
+  Trophy,
+  Disc3,
+  GitGraph,
+  LineChart,
+} from 'lucide-react';
 import { useState } from 'react';
 
 import { cn } from '@/lib/utils';
 import { Card } from '@/components/ui/card';
 import Link from 'next/link';
 
-interface StartScreenProps {
-  onSelectView: (view: 'live' | 'season-stats' | 'calendar' | 'tyres') => void;
-}
-
-export function StartScreen({ onSelectView }: StartScreenProps) {
-  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
-
+export function StartScreen() {
   const menuItems = [
     {
       id: 'team-battles',
@@ -29,7 +30,7 @@ export function StartScreen({ onSelectView }: StartScreenProps) {
       id: 'season-stats',
       title: 'Season Statistics',
       description: 'Driver standings, constructor points, and race results.',
-      icon: Trophy,
+      icon: LineChart,
       color: 'from-amber-500/20 to-orange-500/20',
       hoverColor: 'group-hover:from-amber-500/30 group-hover:to-orange-500/30',
       iconColor: 'text-amber-400',
@@ -101,8 +102,6 @@ export function StartScreen({ onSelectView }: StartScreenProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 + index * 0.1, duration: 0.5 }}
               className="group cursor-pointer"
-              onMouseEnter={() => setHoveredCard(item.id)}
-              onMouseLeave={() => setHoveredCard(null)}
             >
               <Link href={item.id}>
                 <Card

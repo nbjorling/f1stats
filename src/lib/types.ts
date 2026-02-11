@@ -71,12 +71,22 @@ export interface RacePoints {
   points: number;
   position: number;
   cumulative_points: number;
+  is_classified?: boolean;
+  status?: number;
+}
+
+export interface QualifyingResult {
+  meeting_key: number;
+  session_key: number;
+  position: number;
+  date: string;
 }
 
 export interface DriverSeasonStats {
   driver_number: number;
   driver_info?: Driver;
   history: RacePoints[];
+  qualifying_history: QualifyingResult[];
   total_points: number;
 }
 

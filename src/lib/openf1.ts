@@ -180,12 +180,15 @@ export async function getSeasonPoints(
   }
 
   // 2. Get all race sessions for the year
-  const sessions = await getSessions(year);
-  if (sessions.length === 0) return [];
-  console.log('sessions', sessions);
+  const raceSessions = await getSessions(year, 'Race');
+  const qualiSessions = await getSessions(year, 'Qualifying');
+
+  if (raceSessions.length === 0) return [];
+  console.log('raceSessions', raceSessions.length);
+  console.log('qualiSessions', qualiSessions.length);
 
   // 3. Get driver info from last session (for metadata)
-  const lastSession = sessions[sessions.length - 1];
+  const lastSession = raceSessions[raceSessions.length - 1];
   const drivers = await getDrivers(lastSession.session_key);
 
   // 4a. Special handling for 2025: Fetch 2024 drivers to backfill missing country codes
@@ -203,15 +206,20 @@ export async function getSeasonPoints(
   }
 
   // 4. Fetch results for ALL sessions (Sequential to avoid rate limits)
+  // Fetch Race Results
   const historyData: { session: Session; results: SessionResult[] }[] = [];
-
-  for (const session of sessions) {
+  for (const session of raceSessions) {
     const results = await getSessionResults(session.session_key);
     historyData.push({ session, results });
-    // No manual delay needed, queued in API client
   }
 
-  console.log('historyData', JSON.stringify(historyData));
+  // Fetch Qualifying Results
+  const qualiData: { session: Session; results: SessionResult[] }[] = [];
+  for (const session of qualiSessions) {
+    const results = await getSessionResults(session.session_key);
+    qualiData.push({ session, results });
+  }
+
   // 5. Aggregate data
   const driverStatsMap = new Map<number, DriverSeasonStats>();
 
@@ -227,6 +235,7 @@ export async function getSeasonPoints(
       driver_number: d.driver_number,
       driver_info: d,
       history: [],
+      qualifying_history: [],
       total_points: 0,
     });
   });
@@ -234,20 +243,10 @@ export async function getSeasonPoints(
   // Track cumulative points per driver
   const driverCumulativePoints = new Map<number, number>();
 
+  // Process Race Data
   for (const { session, results } of historyData) {
     // Drivers who participated in this session
     const sessionDrivers = new Set<number>();
-
-    // Debug extraction for crucial session
-    if (session.session_key === 9693) {
-      try {
-        const lando = results.find((r) => r.driver_number === 4);
-        await fs.appendFile(
-          '/tmp/debug_f1.log',
-          `AGGREGATE 9693: Results ${results.length}. Lando found: ${!!lando}, Points: ${lando?.points}, DriverNumType: ${typeof lando?.driver_number}\n`,
-        );
-      } catch (e) {}
-    }
 
     results.forEach((result) => {
       const dNum = result.driver_number;
@@ -260,12 +259,9 @@ export async function getSeasonPoints(
           driver_number: dNum,
           driver_info: {
             driver_number: dNum,
-            // ... minimal info if we don't have it ...
-            // Actually we should have it from fallbackDriverMap or initial drivers
-            // but if a NEW driver appears mid-season who wasn't in last race, we might have partial info.
-            // For now let's hope existing logic handles it (it creates a stats object).
           } as Driver, // Partial cast
           history: [],
+          qualifying_history: [],
           total_points: 0,
         };
         // Check fallback map for country if available
@@ -293,6 +289,8 @@ export async function getSeasonPoints(
         points: result.points,
         position: result.position,
         cumulative_points: currentTotal,
+        is_classified: result.position !== null && result.position > 0, // Basic classification check
+        status: result.status,
       });
     });
 
@@ -300,6 +298,12 @@ export async function getSeasonPoints(
     driverStatsMap.forEach((stats, dNum) => {
       if (!sessionDrivers.has(dNum)) {
         const currentTotal = driverCumulativePoints.get(dNum) || 0;
+
+        // If driver didn't participate, likely didn't start (DNS) or wasn't entered.
+        // We push an entry with position 0/null to indicate absence if needed for charts.
+        // For DNS tracking, if they are in the season list but not in this race result,
+        // it might be DNS or just not entered. OpenF1 usually returns DNS rows if they participated in quali?
+        // Let's assume this effectively covers 'Did Not Start' if they are a regular driver.
 
         stats.history.push({
           meeting_key: session.meeting_key,
@@ -309,6 +313,24 @@ export async function getSeasonPoints(
           points: 0,
           position: 0, // N/A
           cumulative_points: currentTotal,
+          is_classified: false,
+          status: 0, // Unknown/Absent
+        });
+      }
+    });
+  }
+
+  // Process Qualifying Data
+  for (const { session, results } of qualiData) {
+    results.forEach((result) => {
+      const dNum = result.driver_number;
+      const stats = driverStatsMap.get(dNum);
+      if (stats && result.position) {
+        stats.qualifying_history.push({
+          meeting_key: session.meeting_key,
+          session_key: session.session_key,
+          position: result.position,
+          date: session.date_start,
         });
       }
     });
