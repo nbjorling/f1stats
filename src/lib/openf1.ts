@@ -733,6 +733,37 @@ export async function getLatestLapData(sessionKey: number): Promise<Lap[]> {
   }
 }
 
+export async function getSessionLaps(sessionKey: number): Promise<Lap[]> {
+  try {
+    return await openF1Client.fetch<Lap[]>(`/laps?session_key=${sessionKey}`);
+  } catch (e) {
+    console.error(`Failed to fetch laps for session ${sessionKey}`, e);
+    return [];
+  }
+}
+
+export async function getSessionStints(
+  sessionKey: number,
+): Promise<TyreStint[]> {
+  try {
+    return await openF1Client.fetch<TyreStint[]>(
+      `/stints?session_key=${sessionKey}`,
+    );
+  } catch (e) {
+    console.error(`Failed to fetch stints for session ${sessionKey}`, e);
+    return [];
+  }
+}
+
+export async function getSessionPit(sessionKey: number): Promise<any[]> {
+  try {
+    return await openF1Client.fetch<any[]>(`/pit?session_key=${sessionKey}`);
+  } catch (e) {
+    console.error(`Failed to fetch pit data for session ${sessionKey}`, e);
+    return [];
+  }
+}
+
 export async function getTelemetry(
   sessionKey: number,
   driverNumber: number,

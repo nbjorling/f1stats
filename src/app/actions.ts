@@ -2,11 +2,19 @@
 
 import {
   getLatestSession,
-  getLatestLapData,
   getDrivers,
   getTelemetry,
+  getSessionLaps,
+  getSessionStints,
+  getSessionPit,
 } from '@/lib/openf1';
-import { Session, Driver, Lap, TelemetryLocation } from '@/lib/types';
+import {
+  Session,
+  Driver,
+  Lap,
+  TelemetryLocation,
+  TyreStint,
+} from '@/lib/types';
 
 export async function fetchLiveSession(): Promise<Session | null> {
   return await getLatestSession();
@@ -19,7 +27,17 @@ export async function fetchSessionDrivers(
 }
 
 export async function fetchLiveLapData(sessionKey: number): Promise<Lap[]> {
-  return await getLatestLapData(sessionKey);
+  return await getSessionLaps(sessionKey);
+}
+
+export async function fetchLiveTyreData(
+  sessionKey: number,
+): Promise<TyreStint[]> {
+  return await getSessionStints(sessionKey);
+}
+
+export async function fetchLivePitData(sessionKey: number): Promise<any[]> {
+  return await getSessionPit(sessionKey);
 }
 
 export async function fetchDriverTelemetry(

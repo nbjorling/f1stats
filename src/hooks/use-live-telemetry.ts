@@ -5,17 +5,23 @@ import {
   fetchLiveSession,
   fetchSessionDrivers,
   fetchLiveLapData,
+  fetchLiveTyreData,
+  fetchLivePitData,
 } from '@/app/actions';
-import { Session, Driver, Lap } from '@/lib/types';
+import { Session, Driver, Lap, TyreStint } from '@/lib/types';
 
 export interface LiveDriverData {
   driver: number;
   positionOnTrack: number; // 0.0 to 1.0
-  gapToLeader: number; // seconds (estimated)
+  gapToLeader: number; // seconds
   color: string;
   name: string;
   lap: number;
   status: string;
+  bestLap: number | null;
+  lastLapTime: number | null;
+  tyreCompound: string | null;
+  tyreAge: number | null;
 }
 
 const DEFAULT_LAP_TIME = 90; // seconds
@@ -25,18 +31,24 @@ const REFRESH_RATE = 33; // ~30fps for smooth animation
 export function useLiveTelemetry() {
   const [session, setSession] = useState<Session | null>(null);
   const [drivers, setDrivers] = useState<Driver[]>([]);
-  const [laps, setLaps] = useState<Map<number, Lap>>(new Map());
+  const [allLaps, setAllLaps] = useState<Lap[]>([]);
+  const [stints, setStints] = useState<TyreStint[]>([]);
+  const [pits, setPits] = useState<any[]>([]);
   const [renderData, setRenderData] = useState<LiveDriverData[]>([]);
   const [sessionTimeRemaining, setSessionTimeRemaining] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const stateRef = useRef<{
-    laps: Map<number, Lap>;
+    allLaps: Lap[];
+    stints: TyreStint[];
+    pits: any[];
     drivers: Driver[];
     session: Session | null;
   }>({
-    laps: new Map(),
+    allLaps: [],
+    stints: [],
+    pits: [],
     drivers: [],
     session: null,
   });
@@ -73,11 +85,19 @@ export function useLiveTelemetry() {
         setDrivers(d);
         stateRef.current.drivers = d;
 
-        // Initial lap data
-        const l = await fetchLiveLapData(s.session_key);
-        const lapMap = new Map(l.map((lap) => [lap.driver_number, lap]));
-        setLaps(lapMap);
-        stateRef.current.laps = lapMap;
+        // Initial data sync
+        const [l, s_stints, p_data] = await Promise.all([
+          fetchLiveLapData(s.session_key),
+          fetchLiveTyreData(s.session_key),
+          fetchLivePitData(s.session_key),
+        ]);
+
+        setAllLaps(l);
+        setStints(s_stints);
+        setPits(p_data);
+        stateRef.current.allLaps = l;
+        stateRef.current.stints = s_stints;
+        stateRef.current.pits = p_data;
         setIsLoading(false);
       } catch (err) {
         console.error('[Telemetry] Failed to initialize:', err);
@@ -143,65 +163,126 @@ export function useLiveTelemetry() {
     if (!session) return;
 
     const interval = setInterval(async () => {
-      const l = await fetchLiveLapData(session.session_key);
-      const lapMap = new Map(l.map((lap) => [lap.driver_number, lap]));
-      setLaps(lapMap);
-      stateRef.current.laps = lapMap;
+      try {
+        const [l, s_stints, p_data] = await Promise.all([
+          fetchLiveLapData(session.session_key),
+          fetchLiveTyreData(session.session_key),
+          fetchLivePitData(session.session_key),
+        ]);
+
+        setAllLaps(l);
+        setStints(s_stints);
+        setPits(p_data);
+        stateRef.current.allLaps = l;
+        stateRef.current.stints = s_stints;
+        stateRef.current.pits = p_data;
+      } catch (err) {
+        console.error('[Telemetry] Polling error:', err);
+      }
     }, POLLING_INTERVAL);
 
     return () => clearInterval(interval);
   }, [session]);
 
-  // 3. High-frequency animation loop
   useEffect(() => {
     const interval = setInterval(() => {
-      const { laps, drivers, session } = stateRef.current;
+      const { allLaps, drivers, session, stints, pits } = stateRef.current;
       if (!session || drivers.length === 0) return;
 
       const now = Date.now();
 
-      const updatedData: LiveDriverData[] = drivers.map((d) => {
-        const lap = laps.get(d.driver_number);
-        let progress = 0;
+      // Find best overall lap for gap calculation
+      const sessionBestLap =
+        allLaps.length > 0 ?
+          Math.min(
+            ...allLaps
+              .map((l) => l.lap_duration)
+              .filter((d): d is number => d !== null && d > 0),
+          )
+        : null;
 
-        if (lap) {
-          const startTime = new Date(lap.date_start).getTime();
+      const updatedData: LiveDriverData[] = drivers.map((d) => {
+        const driverLaps = allLaps.filter(
+          (l) => l.driver_number === d.driver_number,
+        );
+        const latestLap =
+          driverLaps.length > 0 ?
+            driverLaps.reduce((prev, current) =>
+              current.lap_number > prev.lap_number ? current : prev,
+            )
+          : null;
+
+        const bestLap =
+          driverLaps.length > 0 ?
+            Math.min(
+              ...driverLaps
+                .map((l) => l.lap_duration)
+                .filter((d): d is number => d !== null && d > 0),
+            )
+          : null;
+
+        const lastLapWithDuration = [...driverLaps]
+          .sort((a, b) => b.lap_number - a.lap_number)
+          .find((l) => l.lap_duration !== null);
+
+        const latestStint = stints
+          .filter((s) => s.driver_number === d.driver_number)
+          .sort((a, b) => b.stint_number - a.stint_number)[0];
+
+        let progress = 0;
+        let status = 'In Pits';
+
+        if (latestLap) {
+          const startTime = new Date(latestLap.date_start).getTime();
           const elapsed = (now - startTime) / 1000;
 
-          // Use previous lap duration if available, otherwise default
-          const duration = lap.lap_duration || DEFAULT_LAP_TIME;
+          // Check for recent pit activity
+          const driverPits = pits.filter(
+            (p) => p.driver_number === d.driver_number,
+          );
+          const latestPit =
+            driverPits.length > 0 ?
+              driverPits.sort(
+                (a, b) =>
+                  new Date(b.date).getTime() - new Date(a.date).getTime(),
+              )[0]
+            : null;
 
+          const isInPitLane =
+            latestPit && new Date(latestPit.date).getTime() > startTime - 5000;
+
+          if (latestLap.lap_duration === null && !isInPitLane) {
+            if (elapsed < 600) {
+              status = 'Racing';
+            } else {
+              status = 'In Pits';
+            }
+          } else {
+            status = 'In Pits';
+          }
+
+          const duration = latestLap.lap_duration || DEFAULT_LAP_TIME;
           progress = (elapsed / duration) % 1;
+          if (status === 'In Pits') progress = 0;
         }
 
         return {
           driver: d.driver_number,
           positionOnTrack: progress,
-          gapToLeader: 0, // Simplified for now, calculation can be added
+          gapToLeader: bestLap && sessionBestLap ? bestLap - sessionBestLap : 0,
           color: `#${d.team_colour || 'FFFFFF'}`,
           name: d.name_acronym,
-          lap: lap?.lap_number || 0,
-          status: lap ? 'Racing' : 'Waiting',
+          lap: latestLap?.lap_number || 0,
+          status,
+          bestLap: isFinite(bestLap || Infinity) ? bestLap : null,
+          lastLapTime: lastLapWithDuration?.lap_duration || null,
+          tyreCompound: latestStint?.compound || null,
+          tyreAge:
+            latestStint && latestLap ?
+              latestLap.lap_number - latestStint.lap_start + 1
+            : null,
         };
       });
-
-      // Simple Gap estimation based on progress
-      const leader = updatedData.sort(
-        (a, b) => b.lap - a.lap || b.positionOnTrack - a.positionOnTrack,
-      )[0];
-      if (leader) {
-        updatedData.forEach((d) => {
-          let lapDiff = leader.lap - d.lap;
-          let posDiff = leader.positionOnTrack - d.positionOnTrack;
-          if (posDiff < 0) {
-            lapDiff--;
-            posDiff += 1;
-          }
-          // Very rough time gap
-          d.gapToLeader =
-            lapDiff * DEFAULT_LAP_TIME + posDiff * DEFAULT_LAP_TIME;
-        });
-      }
 
       setRenderData(updatedData);
     }, REFRESH_RATE);

@@ -64,6 +64,33 @@ export default function PitWallDashboard() {
     return getTrackById(trackId || '') || allTracks[0];
   }, [session]);
 
+  const formatLapTime = (time: number | null) => {
+    if (time === null || time === undefined) return '-';
+    const mins = Math.floor(time / 60);
+    const secs = (time % 60).toFixed(3);
+    return mins > 0 ? `${mins}:${secs.padStart(6, '0')}` : secs;
+  };
+
+  const getTyreColor = (compound: string | null) => {
+    const c = compound?.toUpperCase();
+    if (c?.includes('SOFT')) return '#ef4444';
+    if (c?.includes('MEDIUM')) return '#f59e0b';
+    if (c?.includes('HARD')) return '#f4f4f5';
+    if (c?.includes('INTER')) return '#22c55e';
+    if (c?.includes('WET')) return '#3b82f6';
+    return '#3f3f46';
+  };
+
+  const getTyreLetter = (compound: string | null) => {
+    const c = compound?.toUpperCase();
+    if (c?.includes('SOFT')) return 'S';
+    if (c?.includes('MEDIUM')) return 'M';
+    if (c?.includes('HARD')) return 'H';
+    if (c?.includes('INTER')) return 'I';
+    if (c?.includes('WET')) return 'W';
+    return '-';
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center p-24">
@@ -100,8 +127,8 @@ export default function PitWallDashboard() {
   }
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 p-6 max-w-7xl mx-auto">
-      <div className="flex-1">
+    <div className="flex flex-col lg:flex-row gap-6 p-6 max-w-[1600px] mx-auto">
+      <div className="flex-1 min-w-0">
         <Card className="bg-zinc-900/50 backdrop-blur-2xl border-zinc-800 overflow-hidden shadow-2xl ring-1 ring-white/5">
           <CardHeader className="space-y-4 border-b border-zinc-800 pb-6">
             <div className="flex items-center justify-between">
@@ -140,7 +167,7 @@ export default function PitWallDashboard() {
             <div className="p-8">
               <TrackVisualization
                 track={currentTrack}
-                drivers={drivers}
+                drivers={drivers.filter((d) => d.status === 'Racing')}
                 selectedDriverId={selectedDriverId}
                 onDriverClick={(id) =>
                   setSelectedDriverId(id === selectedDriverId ? null : id)
@@ -176,71 +203,118 @@ export default function PitWallDashboard() {
         </Card>
       </div>
 
-      <div className="w-full lg:w-96 space-y-4">
+      <div className="w-full lg:w-[480px] space-y-4">
         <Card className="bg-zinc-900/50 backdrop-blur-2xl border-zinc-800 shadow-xl overflow-hidden">
           <CardHeader className="bg-zinc-800/30 border-b border-zinc-800 py-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-xs font-bold text-zinc-400 flex items-center gap-2 uppercase tracking-widest">
                 <Timer className="h-3 w-3" />
-                Race Interval
+                Live Timing
               </CardTitle>
-              <span className="text-[10px] font-mono text-zinc-600">
-                UDP Port 20777
+              <span className="text-[10px] font-mono text-zinc-600 tracking-tighter">
+                SESSION KEY: {session?.session_key}
               </span>
             </div>
           </CardHeader>
-          <CardContent className="p-2 space-y-1">
-            {drivers
-              .sort(
-                (a, b) =>
-                  b.lap - a.lap || b.positionOnTrack - a.positionOnTrack,
-              )
-              .map((d, idx) => (
-                <div
-                  key={d.driver}
-                  onClick={() =>
-                    setSelectedDriverId(
-                      d.driver === selectedDriverId ? null : d.driver,
-                    )
-                  }
-                  className={cn(
-                    'flex items-center justify-between px-3 py-2 rounded-md cursor-pointer transition-all duration-300',
-                    selectedDriverId === d.driver ?
-                      'bg-white/5 ring-1 ring-white/10 shadow-lg'
-                    : 'hover:bg-white/5 border border-transparent',
-                  )}
-                >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="w-1 h-8 rounded-full"
-                      style={{ backgroundColor: d.color }}
-                    />
-                    <div className="flex flex-col">
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono text-[10px] text-zinc-500 w-4">
-                          #{idx + 1}
-                        </span>
-                        <span className="font-black text-xs tracking-tight">
-                          {d.name}
-                        </span>
-                      </div>
-                      <span className="text-[9px] font-mono text-zinc-500 uppercase">
-                        Lap {d.lap}
+          <CardContent className="p-0">
+            {/* Header Column Titles */}
+            <div className="flex items-center text-[9px] font-black text-zinc-600 uppercase px-3 py-2 border-b border-zinc-800/50 bg-black/20">
+              <span className="w-6 text-center">POS</span>
+              <span className="flex-1 ml-4">DRIVER</span>
+              <span className="w-20 text-right">BEST LAP</span>
+              <span className="w-14 text-right">GAP</span>
+              <span className="w-20 text-right">LAP TIME</span>
+              <span className="w-14 text-center">TYRE</span>
+            </div>
+
+            <div className="p-1 space-y-0.5 max-h-[70vh] overflow-y-auto">
+              {drivers
+                .sort((a, b) => {
+                  // In practice/quali, sort by best lap. In race, by position.
+                  // Defaulting to best lap for now
+                  if (!a.bestLap) return 1;
+                  if (!b.bestLap) return -1;
+                  return a.bestLap - b.bestLap;
+                })
+                .map((d, idx) => (
+                  <div
+                    key={d.driver}
+                    onClick={() =>
+                      setSelectedDriverId(
+                        d.driver === selectedDriverId ? null : d.driver,
+                      )
+                    }
+                    className={cn(
+                      'flex items-center h-10 px-3 py-1 rounded-sm cursor-pointer transition-all duration-150',
+                      selectedDriverId === d.driver ?
+                        'bg-white/10 ring-1 ring-white/10 shadow-lg z-10'
+                      : 'hover:bg-white/5 border border-transparent',
+                    )}
+                  >
+                    {/* POS */}
+                    <span className="w-6 text-center font-black text-xs text-zinc-400">
+                      {idx + 1}
+                    </span>
+
+                    {/* DRIVER */}
+                    <div className="flex items-center flex-1 ml-4 min-w-0">
+                      <div
+                        className="w-1 h-6 rounded-full shrink-0"
+                        style={{ backgroundColor: d.color }}
+                      />
+                      <span className="ml-2 font-black text-sm tracking-tight text-white whitespace-nowrap overflow-hidden text-ellipsis">
+                        {d.name}
                       </span>
                     </div>
-                  </div>
-                  <div className="text-right">
-                    <span
-                      className={cn(
-                        'text-[11px] font-mono font-bold tabular-nums',
-                        idx === 0 ? 'text-amber-500' : 'text-zinc-400',
-                      )}
-                    >
-                      {idx === 0 ? 'INTERVAL' : `+${d.gapToLeader.toFixed(3)}s`}
+
+                    {/* BEST LAP */}
+                    <div className="w-20 text-right pr-2">
+                      <span
+                        className={cn(
+                          'text-[11px] font-mono font-bold tabular-nums px-2 py-0.5 rounded-full',
+                          idx === 0 ?
+                            'bg-purple-600/20 text-purple-400 border border-purple-600/30'
+                          : 'bg-green-600/10 text-green-500/80',
+                        )}
+                      >
+                        {formatLapTime(d.bestLap)}
+                      </span>
+                    </div>
+
+                    {/* GAP */}
+                    <span className="w-14 text-right font-mono text-[11px] font-bold text-zinc-400 tabular-nums">
+                      {idx === 0 ? '' : `+${d.gapToLeader.toFixed(3)}`}
                     </span>
+
+                    {/* LAP TIME */}
+                    <div className="w-20 text-right">
+                      {d.status === 'In Pits' ?
+                        <span className="text-red-600 font-black text-[12px] italic tracking-tighter">
+                          PIT
+                        </span>
+                      : <span className="text-white font-mono text-[11px] font-bold tabular-nums">
+                          {formatLapTime(d.lastLapTime)}
+                        </span>
+                      }
+                    </div>
+
+                    {/* TYRE */}
+                    <div className="w-14 flex items-center justify-center gap-1">
+                      <span className="text-[10px] font-mono font-bold text-zinc-500">
+                        {d.tyreAge ?? 0}
+                      </span>
+                      <div
+                        className="w-5 h-5 rounded-full flex items-center justify-center border-2 border-current shadow-inner"
+                        style={{ color: getTyreColor(d.tyreCompound) }}
+                      >
+                        <span className="text-[9px] font-black leading-none">
+                          {getTyreLetter(d.tyreCompound)}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+            </div>
           </CardContent>
         </Card>
 
