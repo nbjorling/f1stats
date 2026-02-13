@@ -74,6 +74,16 @@ export function StartScreen() {
       hoverColor: 'group-hover:from-red-600/30 group-hover:to-zinc-900/30',
       iconColor: 'text-red-500',
     },
+    {
+      id: 'pit-wall-stream',
+      title: 'Pit Wall Auto build map',
+      description:
+        'Professional-grade real-time telemetry and strategy command.',
+      icon: Radio,
+      color: 'from-red-600/20 to-zinc-900/20',
+      hoverColor: 'group-hover:from-red-600/30 group-hover:to-zinc-900/30',
+      iconColor: 'text-red-500',
+    },
   ];
 
   return (

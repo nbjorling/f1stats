@@ -107,6 +107,61 @@ export async function getDrivers(sessionKey: number): Promise<Driver[]> {
   return openF1Client.fetch<Driver[]>(`/drivers?session_key=${sessionKey}`);
 }
 
+export async function getEnrichedDrivers(
+  sessionKey: number,
+): Promise<Driver[]> {
+  const drivers = await getDrivers(sessionKey);
+  if (drivers.length === 0) return [];
+
+  // Load historical drivers for fallback (2025 and 2024)
+  const historicalData: Driver[] = [];
+  try {
+    const d2025 = await getSeasonDrivers(2025);
+    const d2024 = await getSeasonDrivers(2024);
+    historicalData.push(...d2025, ...d2024);
+  } catch (e) {
+    console.warn(
+      '[OpenF1] Failed to load historical driver data for enrichment',
+      e,
+    );
+  }
+
+  // Create a lookup map by driver number (preferring most recent data)
+  const fallbackMap = new Map<number, Driver>();
+  // We reverse historical data to process oldest first, so newest (pushing later) overwrites in map
+  // Wait, historicalData.push(...d2025, ...d2024) puts 2025 first.
+  // Actually, I'll just be explicit.
+  const d2024Map = new Map<number, Driver>();
+  const d2025Map = new Map<number, Driver>();
+
+  try {
+    const d2024 = await getSeasonDrivers(2024);
+    d2024.forEach((d) => d2024Map.set(d.driver_number, d));
+    const d2025 = await getSeasonDrivers(2025);
+    d2025.forEach((d) => d2025Map.set(d.driver_number, d));
+  } catch (e) {}
+
+  return drivers.map((d) => {
+    // Prefer 2025, then 2024
+    const fallback =
+      d2025Map.get(d.driver_number) || d2024Map.get(d.driver_number);
+    if (!fallback) return d;
+
+    return {
+      ...d,
+      name_acronym: d.name_acronym || fallback.name_acronym,
+      team_colour: d.team_colour || fallback.team_colour,
+      team_name: d.team_name || fallback.team_name,
+      first_name: d.first_name || fallback.first_name,
+      last_name: d.last_name || fallback.last_name,
+      full_name: d.full_name || fallback.full_name,
+      broadcast_name: d.broadcast_name || fallback.broadcast_name,
+      country_code: d.country_code || fallback.country_code,
+      headshot_url: d.headshot_url || fallback.headshot_url,
+    };
+  });
+}
+
 export async function getSeasonDrivers(year: number): Promise<Driver[]> {
   const cacheDir = path.join(process.cwd(), 'src', 'data', 'raw', 'drivers');
   const cacheFile = path.join(cacheDir, `${year}.json`);

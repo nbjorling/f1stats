@@ -1,13 +1,16 @@
 'use server';
 
+import { openF1Client } from '@/lib/api-client';
 import {
   getLatestSession,
   getDrivers,
+  getEnrichedDrivers,
   getTelemetry,
   getSessionLaps,
   getSessionStints,
   getSessionPit,
 } from '@/lib/openf1';
+
 import {
   Session,
   Driver,
@@ -23,7 +26,7 @@ export async function fetchLiveSession(): Promise<Session | null> {
 export async function fetchSessionDrivers(
   sessionKey: number,
 ): Promise<Driver[]> {
-  return await getDrivers(sessionKey);
+  return await getEnrichedDrivers(sessionKey);
 }
 
 export async function fetchLiveLapData(sessionKey: number): Promise<Lap[]> {
@@ -46,4 +49,8 @@ export async function fetchDriverTelemetry(
   startTime?: string,
 ): Promise<TelemetryLocation[]> {
   return await getTelemetry(sessionKey, driverNumber, startTime);
+}
+
+export async function fetchMqttToken(): Promise<string | null> {
+  return await openF1Client.getAccessToken();
 }

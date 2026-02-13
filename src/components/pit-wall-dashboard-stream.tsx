@@ -4,10 +4,10 @@ import React, { useState, useMemo } from 'react';
 import { useLiveTelemetry } from '@/hooks/use-live-telemetry';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
-import TrackVisualization from '@/components/track-visualization';
 import { allTracks, getTrackById } from '@/components/f1-tracks';
 import { Activity, Radio, Cpu, Clock } from 'lucide-react';
+import TrackMapCanvas from './TrackMapCanvas';
+import { cn } from '@/lib/utils';
 
 const LAP_TIME = 90;
 const MEDIAN_PIT_TIME = 20;
@@ -138,7 +138,7 @@ export default function PitWallDashboard() {
                 </div>
                 <div>
                   <CardTitle className="text-xl font-black uppercase tracking-tighter">
-                    Pit Wall <span className="text-red-600">Master</span>
+                    Pit Wall <span className="text-red-600">Stream</span>
                   </CardTitle>
                   <p className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest leading-none">
                     {session?.session_name} • {session?.location}
@@ -165,15 +165,7 @@ export default function PitWallDashboard() {
           </CardHeader>
           <CardContent className="p-0 relative bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.02)_0%,_transparent_70%)]">
             <div className="p-8">
-              <TrackVisualization
-                track={currentTrack}
-                drivers={drivers.filter((d) => d.status === 'Racing')}
-                selectedDriverId={selectedDriverId}
-                onDriverClick={(id) =>
-                  setSelectedDriverId(id === selectedDriverId ? null : id)
-                }
-                pitExitPosition={pitExitPosition}
-              />
+              <TrackMapCanvas driversInfo={drivers} />
             </div>
 
             {/* Telemetry Overlay */}
@@ -202,7 +194,6 @@ export default function PitWallDashboard() {
           </CardContent>
         </Card>
       </div>
-
       <div className="w-full lg:w-[480px] space-y-4">
         <Card className="bg-zinc-900/50 backdrop-blur-2xl border-zinc-800 shadow-xl overflow-hidden">
           <CardHeader className="bg-zinc-800/30 border-b border-zinc-800 py-3">

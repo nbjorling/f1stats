@@ -64,7 +64,7 @@ class OpenF1Client {
     this.processing = false;
   }
 
-  private async getAccessToken(): Promise<string | null> {
+  public async getAccessToken(): Promise<string | null> {
     const now = Date.now();
     // buffer execution by 10s
     if (this.accessToken && now < this.tokenExpiresAt - 10000) {
@@ -73,8 +73,6 @@ class OpenF1Client {
 
     const username = process.env.OPENF1_USERNAME;
     const password = process.env.OPENF1_PASSWORD;
-    console.log('[API] Username:', username);
-    console.log('[API] Password:', password);
     if (!username || !password) {
       return null;
     }
